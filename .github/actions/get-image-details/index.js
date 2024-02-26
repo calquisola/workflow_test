@@ -1,3 +1,3 @@
-const { getImageDetails } = require('./list-docker-images');
+const { getImageDetails } = require('./get-details');
 
 getImageDetails();
