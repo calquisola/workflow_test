@@ -1,0 +1,31 @@
+name: Setup Node GH Actions
+description: Setup for actions that use node
+
+inputs:
+  files:
+    description: Space-separated list of files to check out
+    required: false
+  node-version:
+    description: Version of node to use
+    required: false
+    default: '20'
+
+runs:
+  using: composite
+  steps:
+    - name: Set up node
+      uses: actions/setup-node@v4
+      with:
+        check-latest: true
+        node-version: ${{ inputs.node-version }}
+    - name: Install utility packages
+      run: >
+        yarn add
+        --ignore-engines
+        --frozen-lockfile
+        --prefer-offline
+        --network-timeout 1000000000
+        @actions/core
+        @actions/github
+        sinon
+      shell: bash
