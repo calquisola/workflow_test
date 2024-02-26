@@ -1,0 +1,37 @@
+name: Generate Tag
+description: Generates a tag based on branch name, input, or pull request
+inputs:
+  tag:
+    default: ''
+    description: The tag to use if provided
+    required: false
+outputs:
+  tag:
+    description: The generated tag
+    value: ${{ env.tag }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up shell environment
+      run: echo "Preparing environment"
+      shell: bash
+
+    - name: Set tag from input override
+      if: ${{ inputs.tag != '' }}
+      run: echo "tag=${{ inputs.tag }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set tag for main branch
+      if: inputs.tag == '' && github.ref_name == 'main'
+      run: echo "tag=edge" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set tag for non-main branch & tags
+      if: inputs.tag == '' && github.ref_name != 'main'
+      run: echo "tag=${{ github.ref_name }}" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Set tag for pull requests
+      if: contains(fromJson('["pull_request","pull_request_target"]'), github.event_name)
+      run: echo "tag=${{ github.head_ref }}" >> $GITHUB_ENV
+      shell: bash

@@ -1,0 +1,35 @@
+[
+  {
+    "named-dockerfile": true,
+    "path-dependencies": [
+      "app-config.yaml",
+      "catalog-entities.yaml",
+      "provider-dashboard.config.yaml",
+      "certs",
+      "package.json",
+      "packages/backend",
+      "plugins",
+      "yarn.lock"
+    ],
+    "service-name": "backend"
+  },
+  {
+    "named-dockerfile": true,
+    "path-dependencies": [
+      "app-config.yaml",
+      "package.json",
+      "packages/app",
+      "plugins",
+      "yarn.lock"
+    ],
+    "service-name": "frontend"
+  },
+  {
+    "context": "memcached",
+    "service-name": "memcached"
+  },
+  {
+    "context": "postgres",
+    "service-name": "postgres"
+  }
+]

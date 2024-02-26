@@ -14,11 +14,22 @@ on:
   workflow_call:
     inputs:
       image:
-        default: 'node-base'
+        default: 'base-node-image'
         description: True if should force build, else only if changed files on this ref
         type: string
         required: true
 jobs:
+  get-image-details:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up for node GH Actions
+      uses: ./.github/actions/setup-node-actions
+
+    - name: Get image build parameter details
+        uses: ./.github/actions/get-image-details
+      with:
+        name: frontend
+
   build:
     runs-on: ubuntu-latest
     steps:

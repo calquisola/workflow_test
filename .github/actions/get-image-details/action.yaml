@@ -1,0 +1,18 @@
+name: Docker Image Details
+description: Gets build parameters of an service image
+
+inputs:
+  tag:
+    default: ${{ github.ref_name }}
+    description: Tag to use for full image names
+  name:
+    default: backend
+    description: Name of the Service that we want to get the build parameters
+
+outputs:
+  matrix:
+    description: JSON object containing the images
+
+runs:
+  using: node20
+  main: index.js
