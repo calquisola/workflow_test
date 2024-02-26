@@ -26,7 +26,7 @@ jobs:
       uses: ./.github/actions/setup-node-actions
 
     - name: Get image build parameter details
-        uses: ./.github/actions/get-image-details
+      uses: ./.github/actions/get-image-details
       with:
         name: frontend
 
