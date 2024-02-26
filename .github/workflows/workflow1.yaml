@@ -12,7 +12,7 @@ on:
           - frontend
           - backend
   workflow_call:
-      inputs:
+    inputs:
       image:
         description: 'Select the image'
         required: true
