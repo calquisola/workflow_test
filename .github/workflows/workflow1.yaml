@@ -22,6 +22,9 @@ jobs:
   get-image-details:
     runs-on: ubuntu-latest
     steps:
+    - name: Check out the repo
+      uses: actions/checkout@v4
+
     - name: Set up for node GH Actions
       uses: ./.github/actions/setup-node-actions
 
