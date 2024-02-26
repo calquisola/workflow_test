@@ -14,14 +14,10 @@ on:
   workflow_call:
     inputs:
       image:
-        description: 'Select the image'
+        default: 'node-base'
+        description: True if should force build, else only if changed files on this ref
+        type: string
         required: true
-        type: choice
-        options:
-          - base-node-image
-          - frontend
-          - backend
-
 jobs:
   build:
     runs-on: ubuntu-latest
