@@ -1,24 +1,16 @@
-name: Workflow with Options
+name: Build, Test, Scan, Image
 
 on:
   workflow_dispatch:
     inputs:
-      environment:
-        description: 'Select the environment'
+      image:
+        description: 'Select the image'
         required: true
         type: choice
         options:
-          - development
-          - staging
-          - production
-      feature:
-        description: 'Select the feature to deploy'
-        required: false
-        type: choice
-        options:
-          - feature1
-          - feature2
-          - feature3
+          - base-node-image
+          - frontend
+          - backend
 
 jobs:
   build:
@@ -29,5 +21,4 @@ jobs:
 
     - name: Run a script
       run: |
-        echo "Deploying to ${{ github.event.inputs.environment }}"
-        echo "Feature selected: ${{ github.event.inputs.feature }}"
+        echo "Deploying to ${{ inputs.image }}"
