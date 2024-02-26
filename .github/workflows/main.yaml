@@ -7,11 +7,13 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
-  workflow_call:
+
 
 jobs:
 
   build-test-images:
     name: Build and Test Images
     uses: ./.github/workflows/workflow1.yaml
+    with:
+      image: backend
     secrets: inherit

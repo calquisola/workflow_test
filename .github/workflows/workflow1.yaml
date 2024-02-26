@@ -11,6 +11,16 @@ on:
           - base-node-image
           - frontend
           - backend
+  workflow_call:
+      inputs:
+      image:
+        description: 'Select the image'
+        required: true
+        type: choice
+        options:
+          - base-node-image
+          - frontend
+          - backend
 
 jobs:
   build:
