@@ -16,7 +16,7 @@ const getImageDetails = () => {
         'context': 'node-base',
         'service-name': 'node-base',
         'docker-file-path': 'node-base/Dockerfile',
-        'tagged-ghcr-name': `ghcr.io/${owner}/${repo}/node-base:${latest}`,
+        'tagged-ghcr-name': `ghcr.io/${owner}/${repo}/node-base:${tag}`,
         'ghcr-name': `ghcr.io/${owner}/${repo}/node-base`,
         'path-dependencies': 'node-base/Dockerfile'
       }));
