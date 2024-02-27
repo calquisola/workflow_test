@@ -36,7 +36,7 @@ jobs:
       id: get-build-parameters
       uses: ./.github/actions/get-image-details
       with:
-        name: frontend
+        name: ${{ inputs.image}}
 
   build:
     runs-on: ubuntu-latest
