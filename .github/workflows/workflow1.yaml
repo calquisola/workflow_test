@@ -58,7 +58,6 @@ jobs:
         service-name: [frontend, backend, postgres]
 
     name: Build ${{ matrix.service-name }} image
-    runs-on: ubuntu-22.04
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
