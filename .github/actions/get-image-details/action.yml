@@ -11,7 +11,7 @@ inputs:
 
 outputs:
   matrix:
-    description: JSON object containing the images
+    description: JSON object containing the build parameters
 
 runs:
   using: node20

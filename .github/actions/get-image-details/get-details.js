@@ -8,17 +8,19 @@ const getImageDetails = () => {
     const tag = core.getInput('tag').replace(/\//g, '-');
     const imageNameFilter = core.getInput('name'); // Get the "image-name" input
 
-    // Use find to get the first image that matches the "image-name" input
     const foundImage = images.find(img => img['service-name'] === imageNameFilter);
 
     if (!foundImage) {
       // If no match is found, return base node image details
       core.setOutput('matrix', JSON.stringify({
-        'service-name': 'node-base',
         'context': 'node-base',
+        'service-name': 'node-base',
+        'docker-file-path': 'node-base/Dockerfile',
+        'tagged-ghcr-name': `ghcr.io/${owner}/${repo}/node-base:${latest}`,
+        'ghcr-name': `ghcr.io/${owner}/${repo}/node-base`,
+        'path-dependencies': 'node-base/Dockerfile'
       }));
-      console.log('No matching image found.');
-      return; // Exit the function early
+      return;
     }
 
     const imageName = foundImage['service-name'];
