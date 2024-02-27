@@ -47,4 +47,5 @@ jobs:
 
     - name: Run a script
       run: |
-        echo "Deploying to ${{ needs.get-image-details.outputs.matrix }}"
+        echo "Deploying to ${{ needs.get-image-details.outputs.matrix.service-name }}"
+        echo "Deploying to ${{ needs.get-image-details.outputs.matrix.docker-file-path }}"
