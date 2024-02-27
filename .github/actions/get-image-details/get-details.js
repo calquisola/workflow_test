@@ -7,19 +7,20 @@ const getImageDetails = () => {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
     const imageNameFilter = core.getInput('name'); // Get the "image-name" input
-
     const foundImage = images.find(img => img['service-name'] === imageNameFilter);
 
     if (!foundImage) {
       // If no match is found, return base node image details
-      core.setOutput('matrix', JSON.stringify({
+      nodeBaseDetails = {
         'context': 'node-base',
         'service-name': 'node-base',
         'docker-file-path': 'node-base/Dockerfile',
         'tagged-ghcr-name': `ghcr.io/${owner}/${repo}/node-base:${tag}`,
         'ghcr-name': `ghcr.io/${owner}/${repo}/node-base`,
         'path-dependencies': 'node-base/Dockerfile'
-      }));
+      };
+      core.setOutput('matrix', JSON.stringify(nodeBaseDetails));
+      console.log('Output:', JSON.stringify(nodeBaseDetails, null, 2));
       return;
     }
 
@@ -33,13 +34,12 @@ const getImageDetails = () => {
     ].join();
     const longName = `ghcr.io/${owner}/${repo}/${imageName}`;
     const matrix = {
-        ...foundImage,
-        context,
-        'docker-file-path': dockerfilePath,
-        'tagged-ghcr-name': `${longName}:${tag}`,
-        'ghcr-name': longName,
-        'path-dependencies': dependencies,
-
+      ...foundImage,
+      context,
+      'docker-file-path': dockerfilePath,
+      'tagged-ghcr-name': `${longName}:${tag}`,
+      'ghcr-name': longName,
+      'path-dependencies': dependencies,
     };
 
     core.setOutput('matrix', JSON.stringify(matrix));
