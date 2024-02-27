@@ -11,16 +11,20 @@ on:
           - base-node-image
           - frontend
           - backend
+          - postgresql
+          - memcached
   workflow_call:
     inputs:
       image:
-        default: 'base-node-image'
+        default: 'frontend'
         description: True if should force build, else only if changed files on this ref
         type: string
         required: true
 jobs:
   get-image-details:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.get-image-details.outputs.matrix }}
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -29,16 +33,18 @@ jobs:
       uses: ./.github/actions/setup-node-actions
 
     - name: Get image build parameter details
+      id: get-image-details
       uses: ./.github/actions/get-image-details
       with:
         name: frontend
 
   build:
     runs-on: ubuntu-latest
+    needs: [get-image-details]
     steps:
     - name: Check out code
       uses: actions/checkout@v2
 
     - name: Run a script
       run: |
-        echo "Deploying to ${{ inputs.image }}"
+        echo "Deploying to ${{ inputs.get-image-details.matrix }}"
