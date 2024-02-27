@@ -6,8 +6,9 @@ const getImageDetails = () => {
   try {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
-    const imageNameFilter = core.getInput('name'); // Get the "image-name" input
+    const imageNameFilter = core.getInput('name');
     const foundImage = images.find(img => img['service-name'] === imageNameFilter);
+    const baseNodeImage = `ghcr.io/${owner}/${repo}/node-base:${tag}`;
 
     if (!foundImage) {
       // If no match is found, return base node image details
@@ -15,7 +16,7 @@ const getImageDetails = () => {
         'context': 'node-base',
         'service-name': 'node-base',
         'docker-file-path': 'node-base/Dockerfile',
-        'tagged-ghcr-name': `ghcr.io/${owner}/${repo}/node-base:${tag}`,
+        'tagged-ghcr-name': baseNodeImage,
         'ghcr-name': `ghcr.io/${owner}/${repo}/node-base`,
         'path-dependencies': 'node-base/Dockerfile'
       };
@@ -40,6 +41,7 @@ const getImageDetails = () => {
       'tagged-ghcr-name': `${longName}:${tag}`,
       'ghcr-name': longName,
       'path-dependencies': dependencies,
+      'node-base-image': imageName in ['frontend', 'backend'] ? baseNodeImage : ''
     };
 
     core.setOutput('matrix', JSON.stringify(matrix));

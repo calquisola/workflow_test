@@ -1,4 +1,4 @@
-name: Build, Test, Scan, Image
+name: Build, Test and Scan Image
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ on:
         required: true
         type: choice
         options:
-          - base-node-image
+          - node-base
           - frontend
           - backend
           - postgresql
@@ -16,7 +16,7 @@ on:
   workflow_call:
     inputs:
       image:
-        default: 'frontend'
+        default: 'node-base'
         description: True if should force build, else only if changed files on this ref
         type: string
         required: true

@@ -1,5 +1,5 @@
 name: Docker Image Details
-description: Gets build parameters of an service image
+description: Gets build parameters of a single image
 
 inputs:
   tag:
