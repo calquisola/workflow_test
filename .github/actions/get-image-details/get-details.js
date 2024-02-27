@@ -41,7 +41,7 @@ const getImageDetails = () => {
       'tagged-ghcr-name': `${longName}:${tag}`,
       'ghcr-name': longName,
       'path-dependencies': dependencies,
-      'node-base-image': imageName in ['frontend', 'backend'] ? baseNodeImage : ''
+      'node-base-image': imageName === 'frontend' || imageName === 'backend' ? baseNodeImage : ''
     };
 
     core.setOutput('matrix', JSON.stringify(matrix));
