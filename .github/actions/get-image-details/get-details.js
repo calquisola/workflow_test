@@ -12,8 +12,11 @@ const getImageDetails = () => {
     const foundImage = images.find(img => img['service-name'] === imageNameFilter);
 
     if (!foundImage) {
-      // If no image is found, output an empty object
-      core.setOutput('matrix', JSON.stringify({}));
+      // If no match is found, return base node image details
+      core.setOutput('matrix', JSON.stringify({
+        'service-name': 'node-base',
+        'context': 'node-base',
+      }));
       console.log('No matching image found.');
       return; // Exit the function early
     }
@@ -28,14 +31,13 @@ const getImageDetails = () => {
     ].join();
     const longName = `ghcr.io/${owner}/${repo}/${imageName}`;
     const matrix = {
-      [imageName]: {
         ...foundImage,
         context,
         'docker-file-path': dockerfilePath,
         'tagged-ghcr-name': `${longName}:${tag}`,
         'ghcr-name': longName,
         'path-dependencies': dependencies,
-      }
+
     };
 
     core.setOutput('matrix', JSON.stringify(matrix));
