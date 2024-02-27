@@ -66,7 +66,7 @@ jobs:
           # To compute dirty files need fetch-depth=2 to grab previous commit on it
           fetch-depth: 2
       - name: Display Service Name
-      id: display
-      run: |
-        echo "Deploying to ${{ matrix.service-name }}"
-        echo "Deploying to ${{ matrix.service-name }}"
+        id: display
+        run: |
+          echo "Deploying to ${{ matrix.service-name }}"
+          echo "Deploying to ${{ matrix.service-name }}"
