@@ -46,6 +46,21 @@ jobs:
         echo "$format" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
 
+  print-array:
+    runs-on: ubuntu-latest
+    needs: [get-image-details]
+    strategy:
+      matrix:
+        include: ${{ fromJSON(needs.get-image-details.json-array) }}
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Parse Image Details
+      id: print-array
+      run: |
+        echo "Deploying to ${{ matrix.service-name }}"
+
   build:
     runs-on: ubuntu-latest
     needs: [get-image-details]
@@ -58,7 +73,6 @@ jobs:
       run: |
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).docker-file-path }}"
-        echo "Array: ${{ fromJSON(needs.get-image-details.outputs.json-array) }}"
 
   build-images:
     runs-on: ubuntu-latest
