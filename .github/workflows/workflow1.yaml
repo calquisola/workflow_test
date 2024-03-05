@@ -41,8 +41,10 @@ jobs:
     - name: Json Array
       id: format-json-array
       run: |
-        format=$(echo '[${{ steps.get-build-parameters.outputs.matrix }}]'' | jq .)
+        format=$(echo '[${{ steps.get-build-parameters.outputs.matrix }}]' | jq .)
+        echo "value<<EOF" >> $GITHUB_OUTPUT
         echo "$format" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
