@@ -73,7 +73,7 @@ jobs:
       run: |
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).docker-file-path }}"
-        echo "Json Array is ${{ fromJSON(needs.get-image-details.outputs.json-array}}"
+        echo "Json Array is ${{ fromJSON(needs.get-image-details.outputs.json-array) }}"
 
 
   build-images:
