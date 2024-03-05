@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.get-build-parameters.outputs.matrix }}
+      json-array: ${{ steps.format-json-array.outputs.value }}
     steps:
     - name: Check out the repo
       uses: actions/checkout@v4
@@ -37,6 +38,13 @@ jobs:
       uses: ./.github/actions/get-image-details
       with:
         name: ${{ inputs.image}}
+    - name: Json Array
+      id: format-json-array
+      run: |
+        format=$(echo "[${{ steps.get-build-parameters.outputs.matrix }}]" | jq .
+        echo "value<<EOF" >> $GITHUB_OUTPUT
+        echo "$format" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
 
   build:
     runs-on: ubuntu-latest
@@ -50,6 +58,7 @@ jobs:
       run: |
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).docker-file-path }}"
+        echo "Array: ${{ fromJSON(needs.get-image-details.outputs.json-array) }}"
 
   build-images:
     runs-on: ubuntu-latest
