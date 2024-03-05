@@ -51,7 +51,7 @@ jobs:
     needs: [get-image-details]
     strategy:
       matrix:
-        include: ${{ needs.get-image-details.outputs.json-array }}
+        include: ${{ fromJSON(needs.get-image-details.outputs.json-array) }}
     steps:
     - name: Check out code
       uses: actions/checkout@v2
