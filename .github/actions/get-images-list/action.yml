@@ -12,7 +12,7 @@ outputs:
   json-array:
     description: A json formatted array of tagged image names
     value: ${{ steps.format-json-array.outputs.value }}
-  service-array:
+  services:
     description: A json formatted array of service names
     value: ${{ steps.list-services.outputs.value }}
 runs:
