@@ -25,14 +25,11 @@ jobs:
     needs: [get-images-list]
     strategy:
       matrix:
-        service-name: {{ fromJSON(needs.get-images-list.service-array) }}
+        service-name: ["frontend", "backend"]
     name: Build ${{ matrix.service-name }} image
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
-        with:
-          # To compute dirty files need fetch-depth=2 to grab previous commit on it
-          fetch-depth: 2
       - name: Display Service Name
         id: display
         run: |
