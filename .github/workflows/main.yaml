@@ -42,7 +42,7 @@ jobs:
     needs: [get-images-list]
     strategy:
       matrix:
-        includes: ${{ fromJSON(needs.get-images-list.outputs.matrix) }}
+        include: ${{ fromJSON(needs.get-images-list.outputs.matrix) }}
     name: Build ${{ matrix.service-name }} image
     steps:
       - name: Check out repo
