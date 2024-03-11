@@ -13,7 +13,7 @@ jobs:
     name: Get images list
     runs-on: ubuntu-22.04
     outputs:
-      service-array: ${{ steps.images-list.outputs.service-array }}
+      services: ${{ steps.images-list.outputs.services }}
     steps:
       - uses: actions/checkout@v4
       - name: Get images list
@@ -33,6 +33,6 @@ jobs:
       - name: Display Service Name
         id: display
         run: |
-          echo "array : ${{ needs.get-images-list.outputs.service-array }}"
+          echo "array : ${{ needs.get-images-list.outputs.services }}"
 
 
