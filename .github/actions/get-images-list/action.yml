@@ -12,6 +12,9 @@ outputs:
   json-array:
     description: A json formatted array of tagged image names
     value: ${{ steps.format-json-array.outputs.value }}
+  service-array:
+    description: A json formatted array of service names
+    value: ${{ steps.list-services.outputs.value }}
 runs:
   using: 'composite'
   steps:
@@ -29,6 +32,15 @@ runs:
       uses: ./.github/actions/list-docker-images
       with:
         tag: ${{ env.tag }}
+
+    - name: List service names
+      id: list-services
+      run: |
+        format=$(echo '${{ steps.list.outputs.matrix }}' | jq -r '[.[] | ."service-name"]')
+        echo "value<<EOF" >> $GITHUB_OUTPUT
+        echo "$format" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+      shell: bash
 
     - name: Format json formatted array ( for Secrel )
       id: format-json-array

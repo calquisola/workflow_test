@@ -13,9 +13,29 @@ jobs:
     name: Get images list
     runs-on: ubuntu-22.04
     outputs:
-      json-array: ${{ steps.images-list.outputs.json-array }}
+      json-array: ${{ steps.images-list.outputs.service-array }}
     steps:
       - uses: actions/checkout@v4
       - name: Get images list
         uses: ./.github/actions/get-images-list
         id: images-list
+
+  print-service-name:
+    runs-on: ubuntu-latest
+    needs: [get-images-list]
+    strategy:
+      matrix:
+        service-name: {{ needs.get-images-list.service-array }}
+    name: Build ${{ matrix.service-name }} image
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          # To compute dirty files need fetch-depth=2 to grab previous commit on it
+          fetch-depth: 2
+      - name: Display Service Name
+        id: display
+        run: |
+          echo "Deploying to ${{ matrix.service-name }}"
+
+
