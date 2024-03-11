@@ -22,20 +22,20 @@ jobs:
         uses: ./.github/actions/get-images-list
         id: images-list
 
-  # print-service-names:
-  #   runs-on: ubuntu-latest
-  #   needs: [get-images-list]
-  #   strategy:
-  #     matrix:
-  #       service-name: ${{ fromJSON(needs.get-images-list.outputs.services) }}
-  #   name: Build ${{ matrix.service-name }} image
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v4
-  #     - name: Display Service Name
-  #       id: display
-  #       run: |
-  #         echo "service : ${{ matrix.service-name }}"
+  print-service-names:
+    runs-on: ubuntu-latest
+    needs: [get-images-list]
+    strategy:
+      matrix:
+        service-name: ${{ fromJSON(needs.get-images-list.outputs.services) }}
+    name: Build ${{ matrix.service-name }} image
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+      - name: Display Service Name
+        id: display
+        run: |
+          echo "service : ${{ matrix.service-name }}"
 
   print-image-names:
     runs-on: ubuntu-latest
