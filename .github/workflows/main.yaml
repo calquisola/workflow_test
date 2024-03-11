@@ -25,7 +25,7 @@ jobs:
     needs: [get-images-list]
     strategy:
       matrix:
-        service-name: ["frontend", "backend"]
+        service-name: ["frontend"]
     name: Build ${{ matrix.service-name }} image
     steps:
       - name: Check out repo
@@ -33,6 +33,6 @@ jobs:
       - name: Display Service Name
         id: display
         run: |
-          echo "Deploying to ${{ matrix.service-name }}"
+          echo "Deploying to ${{ fromJSON(needs.get-images-list.outpust.service-array) }}"
 
 
