@@ -1,0 +1,40 @@
+name: Get images list
+description: Obtains a list a of images from a docker registry
+inputs:
+  tag:
+    default: ''
+    description: The tag to use for the images list
+    required: false
+outputs:
+  matrix:
+    description: A formatted list of images used for SecRel
+    value: ${{ steps.list.outputs.matrix }}
+  json-array:
+    description: A json formatted array of tagged image names
+    value: ${{ steps.format-json-array.outputs.value }}
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up for node GH Actions
+      uses: ./.github/actions/setup-node-actions
+
+    - name: Generate Tag
+      id: generate-tag
+      uses: ./.github/actions/generate-tag
+      with:
+        tag: ${{ inputs.tag }}
+
+    - name: List docker images
+      id: list
+      uses: ./.github/actions/list-docker-images
+      with:
+        tag: ${{ env.tag }}
+
+    - name: Format json formatted array ( for Secrel )
+      id: format-json-array
+      run: |
+        format=$(echo '${{ steps.list.outputs.matrix }}' | jq -r '[.[] | ."tagged-ghcr-name"]')
+        echo "value<<EOF" >> $GITHUB_OUTPUT
+        echo "$format" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+      shell: bash

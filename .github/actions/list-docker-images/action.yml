@@ -1,0 +1,15 @@
+name: List Docker images
+description: Generates lists of docker images for repo in desired formats
+
+inputs:
+  tag:
+    default: ${{ github.ref_name }}
+    description: Tag to use for full image names
+
+outputs:
+  matrix:
+    description: Array of objects each containing the image's dockerfile, short name, and full name
+
+runs:
+  using: node20
+  main: index.js

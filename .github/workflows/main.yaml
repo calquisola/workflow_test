@@ -9,9 +9,13 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-test-images:
-    name: Build and Test Images
-    uses: ./.github/workflows/workflow1.yaml
-    with:
-      image: backend
-    secrets: inherit
+  get-images-list:
+    name: Get images list
+    runs-on: ubuntu-22.04
+    outputs:
+      json-array: ${{ steps.images-list.outputs.json-array }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get images list
+        uses: ./.github/actions/get-images-list
+        id: images-list
