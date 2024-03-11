@@ -13,7 +13,7 @@ jobs:
     name: Get images list
     runs-on: ubuntu-22.04
     outputs:
-      json-array: ${{ steps.images-list.outputs.service-array }}
+      json-array: ${{ steps.list-services.outputs.service-array }}
     steps:
       - uses: actions/checkout@v4
       - name: Get images list
