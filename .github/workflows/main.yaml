@@ -25,7 +25,7 @@ jobs:
     needs: [get-images-list]
     strategy:
       matrix:
-        service-name: '{{ needs.get-images-list.outputs.service-array }}'
+        service-name: ${{ needs.get-images-list.outputs.service-array }}
     name: Build ${{ matrix.service-name }} image
     steps:
       - name: Check out repo
