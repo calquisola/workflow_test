@@ -13,9 +13,9 @@ jobs:
     name: Get images list
     runs-on: ubuntu-22.04
     outputs:
-      matrix: $ {{ steps.images-list.outputs.matrix }}
-      # services: ${{ steps.images-list.outputs.services }}
-      # tagged-images: ${{ steps.images-list.outputs.json-array }}
+      matrix: ${{ steps.images-list.outputs.matrix }}
+      services: ${{ steps.images-list.outputs.services }}
+      tagged-images: ${{ steps.images-list.outputs.json-array }}
     steps:
       - uses: actions/checkout@v4
       - name: Get images list
