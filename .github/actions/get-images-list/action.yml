@@ -33,13 +33,21 @@ runs:
       with:
         tag: ${{ env.tag }}
 
+    # - name: List service names
+    #   id: list-services
+    #   run: |
+    #     format=$(echo '${{ steps.list.outputs.matrix }}' | jq -r '[.[] | ."service-name"]')
+    #     echo "value<<EOF" >> $GITHUB_OUTPUT
+    #     echo "$format" >> $GITHUB_OUTPUT
+    #     echo "EOF" >> $GITHUB_OUTPUT
+    #     echo "$format"
+    #   shell: bash
+
     - name: List service names
       id: list-services
       run: |
         format=$(echo '${{ steps.list.outputs.matrix }}' | jq -r '[.[] | ."service-name"]')
-        echo "value<<EOF" >> $GITHUB_OUTPUT
-        echo "$format" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
+        echo "value=$format" >> $GITHUB_OUTPUT
         echo "$format"
       shell: bash
 
