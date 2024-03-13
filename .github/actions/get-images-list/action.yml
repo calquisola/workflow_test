@@ -46,9 +46,7 @@ runs:
     - name: List service names
       id: list-services
       run: |
-        format=$(echo '${{ steps.list.outputs.matrix }}' | jq -r '[.[] | ."service-name"]')
-        echo "value=$(echo $format)" >> $GITHUB_OUTPUT
-        echo "$format"
+        echo "value=$(jq -r '[.[] | ."service-name"]' <<< '${{ steps.list.outputs.matrix }}')" >> $GITHUB_OUTPUT
       shell: bash
 
     - name: Format json formatted array ( for Secrel )
