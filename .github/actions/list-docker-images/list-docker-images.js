@@ -11,8 +11,11 @@ const listDockerImages = () => {
     let filteredImages = images;
     // filter out the node base image
     if (!includeBaseImage) {
+      console.log('filtering images...')
       filteredImages = images.filter(img => !img['is-base-image']);
+      console.log('filteredImages:', JSON.stringify(filteredImages, null, 2));
     }
+
 
     const matrix = filteredImages.map(img => {
       const imageName = img['service-name'];
