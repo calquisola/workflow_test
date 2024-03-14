@@ -10,7 +10,7 @@ const listDockerImages = () => {
     console.log(`includeBaseImage: ${includeBaseImage}`);
     let filteredImages = images;
     // filter out the node base image
-    if (!includeBaseImage) {
+    if (includeBaseImage == 'false') {
       console.log('filtering images...')
       filteredImages = images.filter(img => !img['is-base-image']);
       console.log('filteredImages:', JSON.stringify(filteredImages, null, 2));
