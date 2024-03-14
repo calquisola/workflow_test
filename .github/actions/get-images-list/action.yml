@@ -5,6 +5,11 @@ inputs:
     default: ''
     description: The tag to use for the images list
     required: false
+  include-base-image:
+    default: false
+    type: boolean
+    required: false
+    description: Flag to include the node base image to the list
 outputs:
   matrix:
     description: A formatted list of images used for SecRel

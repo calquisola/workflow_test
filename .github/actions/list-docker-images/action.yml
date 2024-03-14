@@ -5,6 +5,10 @@ inputs:
   tag:
     default: ${{ github.ref_name }}
     description: Tag to use for full image names
+  include-base-image:
+    default: false
+    type: boolean
+    description: Flag to include the node base image to the list
 
 outputs:
   matrix:

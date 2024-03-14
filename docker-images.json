@@ -31,5 +31,10 @@
   {
     "context": "postgres",
     "service-name": "postgres"
+  },
+  {
+    "context": "node-base",
+    "service-name": "node-base",
+    "is-base-image": true
   }
 ]

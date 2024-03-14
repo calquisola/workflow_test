@@ -6,7 +6,14 @@ const listDockerImages = () => {
   try {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
-    const matrix = images.map(img => {
+    const includeBaseImage = core.getInput('include-base-image').replace(/\//g, '-');
+    const filteredImages = images;
+    // filter out the node base image
+    if (!includeBaseImage) {
+      filteredImages = images.filter(img => !img['is-base-image']);
+    }
+
+    const matrix = filteredImages.map(img => {
       const imageName = img['service-name'];
       const context = img['context'] ?? '.';
       const dockerfilePath = `${context}/Dockerfile${
