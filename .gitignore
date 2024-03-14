@@ -131,3 +131,4 @@ dist
 
 build-test-images.yaml
 scratch.txt
+test.js
