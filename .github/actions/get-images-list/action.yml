@@ -37,6 +37,7 @@ runs:
       uses: ./.github/actions/list-docker-images
       with:
         tag: ${{ env.tag }}
+        include-base-image: ${{ inputs.include-base-image }}
 
     # - name: List service names
     #   id: list-services
