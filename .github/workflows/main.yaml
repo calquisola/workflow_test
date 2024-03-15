@@ -25,7 +25,7 @@ jobs:
           include-base-image: true
 
   build-base-node-image:
-    needs: [get-image-details]
+    needs: [get-images-list]
     name: Build Base Node Image
     uses: ./.github/workflows/workflow1.yaml
     with:
