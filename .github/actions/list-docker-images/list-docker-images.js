@@ -7,15 +7,14 @@ const listDockerImages = () => {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
     const includeBaseImage = core.getInput('include-base-image').replace(/\//g, '-');
-    console.log(`includeBaseImage: ${includeBaseImage}`);
+    console.log(`includeBaseImage: ${typeof(includeBaseImage)}`);
     let filteredImages = images;
-    // filter out the node base image
-    if (includeBaseImage == 'false') {
-      console.log('filtering images...')
-      filteredImages = images.filter(img => !img['is-base-image']);
-      console.log('filteredImages:', JSON.stringify(filteredImages, null, 2));
-    }
 
+    // filter out the node base image, includeBaseImage is a string
+    if (includeBaseImage == 'false') {
+      filteredImages = images.filter(img => !img['is-base-image']);
+
+    }
 
     const matrix = filteredImages.map(img => {
       const imageName = img['service-name'];
