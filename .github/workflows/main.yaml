@@ -27,7 +27,7 @@ jobs:
   build-base-node-image:
     needs: [get-image-details]
     name: Build Base Node Image
-    uses: ./.github/workflows/build-test-scan-image.yaml
+    uses: ./.github/workflows/workflow1.yaml
     with:
       image: node-base
     secrets: inherit
