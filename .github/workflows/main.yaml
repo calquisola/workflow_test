@@ -32,6 +32,17 @@ jobs:
       image: node-base
     secrets: inherit
 
+  build-images:
+    name: Build Application Images
+    needs: [get-images-list, build-base-node-image]
+    strategy:
+      matrix:
+        service-name: ${{ fromJSON(needs.get-service-names.outputs.services-array) }}
+    uses: ./.github/workflows/workflow1.yaml
+    with:
+      image: ${{ matrix.service-name }}
+    secrets: inherit
+
 
   # print-service-names:
   #   runs-on: ubuntu-latest
