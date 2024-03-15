@@ -61,36 +61,36 @@ jobs:
       run: |
         echo "Deploying to ${{ matrix.service-name }}"
 
-  build:
-    runs-on: ubuntu-latest
-    needs: [get-image-details]
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
+  # build:
+  #   runs-on: ubuntu-latest
+  #   needs: [get-image-details]
+  #   steps:
+  #   - name: Check out code
+  #     uses: actions/checkout@v2
 
-    - name: Parse Image Details
-      id: parse-json
-      run: |
-        echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).service-name }}"
-        echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).docker-file-path }}"
-        echo "Json Array is ${{ needs.get-image-details.outputs.json-array }}"
+  #   - name: Parse Image Details
+  #     id: parse-json
+  #     run: |
+  #       echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).service-name }}"
+  #       echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.matrix).docker-file-path }}"
+  #       echo "Json Array is ${{ needs.get-image-details.outputs.json-array }}"
 
 
-  build-images:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        service-name: [frontend, backend, postgres]
+  # build-images:
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     matrix:
+  #       service-name: [frontend, backend, postgres]
 
-    name: Build ${{ matrix.service-name }} image
-    steps:
-      - name: Check out repo
-        uses: actions/checkout@v4
-        with:
-          # To compute dirty files need fetch-depth=2 to grab previous commit on it
-          fetch-depth: 2
-      - name: Display Service Name
-        id: display
-        run: |
-          echo "Deploying to ${{ matrix.service-name }}"
-          echo "Deploying to ${{ matrix.service-name }}"
+  #   name: Build ${{ matrix.service-name }} image
+  #   steps:
+  #     - name: Check out repo
+  #       uses: actions/checkout@v4
+  #       with:
+  #         # To compute dirty files need fetch-depth=2 to grab previous commit on it
+  #         fetch-depth: 2
+  #     - name: Display Service Name
+  #       id: display
+  #       run: |
+  #         echo "Deploying to ${{ matrix.service-name }}"
+  #         echo "Deploying to ${{ matrix.service-name }}"
