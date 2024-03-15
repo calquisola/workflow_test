@@ -37,7 +37,7 @@ jobs:
     needs: [get-images-list, build-base-node-image]
     strategy:
       matrix:
-        service-name: ${{ fromJSON(needs.get-images-list.outputs.services-array) }}
+        service-name: ${{ fromJSON(needs.get-images-list.outputs.services) }}
     uses: ./.github/workflows/workflow1.yaml
     with:
       image: ${{ matrix.service-name }}
