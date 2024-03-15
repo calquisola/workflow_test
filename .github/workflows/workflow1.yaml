@@ -25,6 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       image-details: ${{ steps.get-build-parameters.outputs.image-details }}
+      service-name: ${{ fromJSON(steps.get-build-parameters.outputs.image-details).service-name }}
       json-array: ${{ steps.format-json-array.outputs.value }}
     steps:
     - name: Check out the repo
@@ -71,7 +72,7 @@ jobs:
     - name: Parse Image Details
       id: parse-json
       run: |
-        echo "Deploying to ${{ needs.get-image-details.outputs.image-details.service-name }}"
+        echo "Deploying to ${{ needs.get-image-details.outputs.service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).docker-file-path }}"
         echo "Json Array is ${{ needs.get-image-details.outputs.json-array }}"
