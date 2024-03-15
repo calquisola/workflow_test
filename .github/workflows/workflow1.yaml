@@ -41,7 +41,7 @@ jobs:
     - name: Json Array
       id: format-json-array
       run: |
-        format=$(echo '[${{ steps.get-build-parameters.outputs.matrix }}]' | jq .)
+        format=$(echo '[${{ steps.get-build-parameters.outputs.image-details }}]' | jq .)
         echo "value<<EOF" >> $GITHUB_OUTPUT
         echo "$format" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT
@@ -71,6 +71,7 @@ jobs:
     - name: Parse Image Details
       id: parse-json
       run: |
+        echo "Deploying to ${{ needs.get-image-details.outputs.image-details.service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).service-name }}"
         echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).docker-file-path }}"
         echo "Json Array is ${{ needs.get-image-details.outputs.json-array }}"
