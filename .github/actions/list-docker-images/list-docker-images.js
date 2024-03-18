@@ -6,11 +6,11 @@ const listDockerImages = () => {
   try {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
-    const includeBaseImage = core.getInput('include-base-image').replace(/\//g, '-');
+    const includeBaseImage = core.getInput('include-base-image').replace(/\//g, '-').toLowerCase() === 'true';
     let filteredImages = images;
 
     // filter out the node base image, includeBaseImage is a string
-    if (includeBaseImage == 'false') {
+    if (!includeBaseImage) {
       filteredImages = images.filter(img => !img['is-base-image']);
     }
 
