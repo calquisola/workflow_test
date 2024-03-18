@@ -22,7 +22,7 @@ jobs:
         uses: ./.github/actions/get-images-list
         id: images-list
         with:
-          include-base-image: false
+          include-base-image: true
 
   build-base-node-image:
     needs: [get-images-list]
