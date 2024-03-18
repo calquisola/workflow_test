@@ -40,9 +40,10 @@ test('Valid imageNameFilter "node-base" returns correct output', async () => {
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/node-base:latest`,
     'ghcr-name': `ghcr.io/${repoOwner}/${repoName}/node-base`,
     'path-dependencies': 'node-base/Dockerfile',
+    'base-image': ''
   };
 
-  assert.ok(core.setOutput.calledWith('matrix', JSON.stringify(expectedOutput)));
+  assert.ok(core.setOutput.calledWith('image-details', JSON.stringify(expectedOutput)));
 });
 
 test('Valid imageNameFilter for "backend" service returns correct output', async () => {
@@ -63,7 +64,7 @@ test('Valid imageNameFilter for "backend" service returns correct output', async
   };
 
 
-  assert.ok(core.setOutput.calledWith('matrix', JSON.stringify(expectedOutput)));
+  assert.ok(core.setOutput.calledWith('image-details', JSON.stringify(expectedOutput)));
 });
 
 test('Valid imageNameFilter for "frontend" service returns correct output', async () => {
@@ -83,7 +84,7 @@ test('Valid imageNameFilter for "frontend" service returns correct output', asyn
     'base-image': `ghcr.io/${repoOwner}/${repoName}/node-base:latest`
   };
 
-  assert.ok(core.setOutput.calledWith('matrix', JSON.stringify(expectedOutput)));
+  assert.ok(core.setOutput.calledWith('image-details', JSON.stringify(expectedOutput)));
 });
 
 test('Valid imageNameFilter for "postgres" service returns correct output', async () => {
@@ -102,7 +103,7 @@ test('Valid imageNameFilter for "postgres" service returns correct output', asyn
     'base-image': ''
   };
 
-  assert.ok(core.setOutput.calledWith('matrix', JSON.stringify(expectedOutput)));
+  assert.ok(core.setOutput.calledWith('image-details', JSON.stringify(expectedOutput)));
 });
 
 test('Valid imageNameFilter for "memcached" service returns correct output', async () => {
@@ -121,7 +122,7 @@ test('Valid imageNameFilter for "memcached" service returns correct output', asy
     'base-image': ''
   };
 
-  assert.ok(core.setOutput.calledWith('matrix', JSON.stringify(expectedOutput)));
+  assert.ok(core.setOutput.calledWith('image-details', JSON.stringify(expectedOutput)));
 });
 
 test('Invalid imageNameFilter throws an error', async () => {
