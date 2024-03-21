@@ -55,7 +55,8 @@ test('Get images matrix', () => {
         'path-dependencies':
           './Dockerfile.backend,app-config.yaml,catalog-entities.yaml,provider-dashboard.config.yaml,certs,package.json,packages/backend,plugins,yarn.lock',
         'service-name': 'backend',
-        context: '.',
+        'node-base': true,
+        'context': '.',
         'docker-file-path': './Dockerfile.backend',
         'tagged-ghcr-name': 'ghcr.io/foo-owner/bar-repo/backend:one-two-three',
         'ghcr-name': 'ghcr.io/foo-owner/bar-repo/backend',
@@ -65,13 +66,14 @@ test('Get images matrix', () => {
         'path-dependencies':
           './Dockerfile.frontend,app-config.yaml,package.json,packages/app,plugins,yarn.lock',
         'service-name': 'frontend',
-        context: '.',
+        'node-base': true,
+        'context': '.',
         'docker-file-path': './Dockerfile.frontend',
         'tagged-ghcr-name': 'ghcr.io/foo-owner/bar-repo/frontend:one-two-three',
         'ghcr-name': 'ghcr.io/foo-owner/bar-repo/frontend',
       },
       {
-        context: 'memcached',
+        'context': 'memcached',
         'service-name': 'memcached',
         'docker-file-path': 'memcached/Dockerfile',
         'tagged-ghcr-name':
@@ -80,7 +82,7 @@ test('Get images matrix', () => {
         'path-dependencies': 'memcached/Dockerfile',
       },
       {
-        context: 'postgres',
+        'context': 'postgres',
         'service-name': 'postgres',
         'docker-file-path': 'postgres/Dockerfile',
         'tagged-ghcr-name': 'ghcr.io/foo-owner/bar-repo/postgres:one-two-three',

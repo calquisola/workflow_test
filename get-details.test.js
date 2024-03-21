@@ -36,6 +36,7 @@ test('Valid imageNameFilter "node-base" returns correct output', async () => {
   const expectedOutput = {
     'context': 'node-base',
     'service-name': 'node-base',
+    'is-base-image': true,
     'docker-file-path': 'node-base/Dockerfile',
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/node-base:latest`,
     'ghcr-name': `ghcr.io/${repoOwner}/${repoName}/node-base`,
@@ -54,8 +55,9 @@ test('Valid imageNameFilter for "backend" service returns correct output', async
 
   const expectedOutput = {
     'named-dockerfile': true,
-    'path-dependencies': './Dockerfile.backend,app-config.yaml,catalog-entities.yaml,provider-dashboard.config.yaml,certs,package.json,packages/backend,plugins,yarn.lock',
+    'path-dependencies': './Dockerfile.backend,app-config.yaml,catalog-entities.yaml,provider-dashboard.config.yaml,certs,package.json,packages/backend,plugins,yarn.lock,node-base/Dockerfile',
     'service-name': 'backend',
+    'node-base': true,
     'context': '.',
     'docker-file-path': './Dockerfile.backend',
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/backend:latest`,
@@ -75,8 +77,9 @@ test('Valid imageNameFilter for "frontend" service returns correct output', asyn
 
   const expectedOutput = {
     'named-dockerfile': true,
-    'path-dependencies': "./Dockerfile.frontend,app-config.yaml,package.json,packages/app,plugins,yarn.lock",
+    'path-dependencies': "./Dockerfile.frontend,app-config.yaml,package.json,packages/app,plugins,yarn.lock,node-base/Dockerfile",
     'service-name': "frontend",
+    'node-base': true,
     'context': ".",
     'docker-file-path': "./Dockerfile.frontend",
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/frontend:latest`,

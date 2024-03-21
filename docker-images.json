@@ -11,7 +11,8 @@
       "plugins",
       "yarn.lock"
     ],
-    "service-name": "backend"
+    "service-name": "backend",
+    "node-base": true
   },
   {
     "named-dockerfile": true,
@@ -22,7 +23,8 @@
       "plugins",
       "yarn.lock"
     ],
-    "service-name": "frontend"
+    "service-name": "frontend",
+    "node-base": true
   },
   {
     "context": "memcached",

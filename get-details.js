@@ -7,7 +7,9 @@ const getImageDetails = () => {
     const { owner, repo } = github.context.repo;
     const tag = core.getInput('tag').replace(/\//g, '-');
     const imageNameFilter = core.getInput('name');
-    const foundImage = images.find(img => img['service-name'] === imageNameFilter);
+    const foundImage = images.find(
+      img => img['service-name'] === imageNameFilter,
+    );
 
     if (!foundImage) {
       throw new Error(`${imageNameFilter} is an invalid image name`);
@@ -15,29 +17,31 @@ const getImageDetails = () => {
 
     const baseImage = images.find(img => img['is-base-image']);
     const baseNodeImage = `ghcr.io/${owner}/${repo}/${baseImage['service-name']}:${tag}`;
+    const baseNodeImageFilePath = `${baseImage['service-name']}/Dockerfile`
 
     const imageName = foundImage['service-name'];
     const context = foundImage['context'] ?? '.';
     const dockerfilePath = `${context}/Dockerfile${foundImage['named-dockerfile'] ? '.' + imageName : ''}`;
-    const dependencies = [
+    let dependencies = [
       dockerfilePath,
       ...(foundImage['path-dependencies'] ?? []),
-    ].join();
+    ];
     const ghcrName = `ghcr.io/${owner}/${repo}/${imageName}`;
 
-    // Prepare the output data by excluding 'is-base-image' property and adding new fields
+    // add base node image's dockerfile to the backend and frontend dependencies
+    if(['backend', 'frontend'].includes(imageName)){
+      dependencies = [...dependencies, baseNodeImageFilePath]
+    }
+
     const outputData = {
       ...foundImage,
       context,
       'docker-file-path': dockerfilePath,
       'tagged-ghcr-name': `${ghcrName}:${tag}`,
       'ghcr-name': ghcrName,
-      'path-dependencies': dependencies,
-      'base-image': (['backend', 'frontend'].includes(imageName) && baseNodeImage) || '',
+      'path-dependencies': dependencies.join(),
+      'base-image': foundImage['node-base'] && baseNodeImage || '',
     };
-
-    // Exclude 'is-base-image' property from the output data
-    delete outputData['is-base-image'];
 
     core.setOutput('image-details', JSON.stringify(outputData));
     console.log('Output:', JSON.stringify(outputData, null, 2));
