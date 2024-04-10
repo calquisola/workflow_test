@@ -23,7 +23,7 @@ jobs:
     steps:
     - name: Check app-version
       run: |
-        echo ${{ format('{0}:{1}',"test-image", ( inputs.prod-release && 'latest' ) || inputs.app-version)  }}
+        echo ${{ format('test-image:{0}', ( inputs.prod-release && 'latest' ) || inputs.app-version)  }}
 
 
 
