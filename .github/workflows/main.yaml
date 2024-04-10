@@ -27,6 +27,7 @@ jobs:
       run: |
         echo "test"
         echo '${{ toJson(github) }}'
+        echo '${{ toJson(github.event) }}'
         echo $PROD_RELEASE
         echo $APP_VERSION
       env:
