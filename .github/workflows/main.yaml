@@ -26,6 +26,7 @@ jobs:
     - name: Check app-version
       run: |
         echo "test"
+        echo ${{ github }}
         echo $PROD_RELEASE
         echo $APP_VERSION
       env:
