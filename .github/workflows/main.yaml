@@ -24,8 +24,8 @@ jobs:
     steps:
     - name: Check app-version
       run: |
-        echo ${{ github.event.inputs.prod-release }}
-        echo ${{ github.event.inputs.app-version }}
+        echo ${{ inputs.prod-release }}
+        echo ${{ inputs.app-version }}
         if [[ "${{ github.event.inputs.prod-release }}" == "false" && (-z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null") ]]; then
           echo "TAG=test-image:latest"
         else
