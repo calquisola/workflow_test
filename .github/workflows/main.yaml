@@ -6,6 +6,16 @@ on:
       - main
   pull_request:
     branches: [main]
+  workflow_call:
+    prod-release:
+      description: True if this is initiated from a production release
+      required: false
+      default: false
+      type: boolean
+    app-version:
+      description: App version value
+      required: false
+      type: string
   workflow_dispatch:
     prod-release:
       description: True if this is initiated from a production release
