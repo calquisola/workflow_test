@@ -25,6 +25,7 @@ jobs:
     steps:
     - name: Check app-version
       run: |
+        echo "test"
         echo $PROD_RELEASE
         echo $APP_VERSION
       env:
