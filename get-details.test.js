@@ -99,6 +99,7 @@ test('Valid imageNameFilter for "postgres" service returns correct output', asyn
   const expectedOutput = {
     'context': 'postgres',
     'service-name': 'postgres',
+    'node-base': false,
     'docker-file-path': 'postgres/Dockerfile',
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/postgres:latest`,
     'ghcr-name': `ghcr.io/${repoOwner}/${repoName}/postgres`,
@@ -118,6 +119,7 @@ test('Valid imageNameFilter for "memcached" service returns correct output', asy
   const expectedOutput = {
     'context': 'memcached',
     'service-name': 'memcached',
+    'node-base': false,
     'docker-file-path': 'memcached/Dockerfile',
     'tagged-ghcr-name': `ghcr.io/${repoOwner}/${repoName}/memcached:latest`,
     'ghcr-name': `ghcr.io/${repoOwner}/${repoName}/memcached`,

@@ -28,11 +28,13 @@
   },
   {
     "context": "memcached",
-    "service-name": "memcached"
+    "service-name": "memcached",
+    "node-base": false
   },
   {
     "context": "postgres",
-    "service-name": "postgres"
+    "service-name": "postgres",
+    "node-base": false
   },
   {
     "context": "node-base",

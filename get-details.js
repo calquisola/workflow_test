@@ -17,7 +17,7 @@ const getImageDetails = () => {
 
     const baseImage = images.find(img => img['is-base-image']);
     const baseNodeImage = `ghcr.io/${owner}/${repo}/${baseImage['service-name']}:${tag}`;
-    const baseNodeImageFilePath = `${baseImage['service-name']}/Dockerfile`
+    const baseNodeImageDockerFilePath = `${baseImage['service-name']}/Dockerfile`
 
     const imageName = foundImage['service-name'];
     const context = foundImage['context'] ?? '.';
@@ -29,8 +29,8 @@ const getImageDetails = () => {
     const ghcrName = `ghcr.io/${owner}/${repo}/${imageName}`;
 
     // add base node image's dockerfile to the backend and frontend dependencies
-    if(['backend', 'frontend'].includes(imageName)){
-      dependencies = [...dependencies, baseNodeImageFilePath]
+    if (foundImage['node-base']) {
+      dependencies.push(baseNodeImageDockerFilePath);
     }
 
     const outputData = {

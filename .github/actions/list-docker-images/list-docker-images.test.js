@@ -75,6 +75,7 @@ test('Get images matrix', () => {
       {
         'context': 'memcached',
         'service-name': 'memcached',
+        'node-base': false,
         'docker-file-path': 'memcached/Dockerfile',
         'tagged-ghcr-name':
           'ghcr.io/foo-owner/bar-repo/memcached:one-two-three',
@@ -84,6 +85,7 @@ test('Get images matrix', () => {
       {
         'context': 'postgres',
         'service-name': 'postgres',
+        'node-base': false,
         'docker-file-path': 'postgres/Dockerfile',
         'tagged-ghcr-name': 'ghcr.io/foo-owner/bar-repo/postgres:one-two-three',
         'ghcr-name': 'ghcr.io/foo-owner/bar-repo/postgres',
