@@ -26,7 +26,7 @@ jobs:
     - name: Check app-version
       run: |
         echo "test"
-        echo ${{ fromJSON(github) }}
+        echo '${{ fromJson(github) }}''
         echo $PROD_RELEASE
         echo $APP_VERSION
       env:
