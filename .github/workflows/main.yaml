@@ -15,6 +15,7 @@ on:
         type: boolean
       app-version:
         description: App version value
+        default: 'latest'
         required: false
         type: string
 jobs:
