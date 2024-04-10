@@ -24,7 +24,7 @@ jobs:
     steps:
     - name: Check app-version
       run: |
-        echo ${{ format('test-image:{0}', ( inputs.prod-release && 'latest' ) || inputs.app-version)  }}
+        echo ${{ format('test-image:{0}', (github.event.inputs.prod-release == false && (github.event.inputs.app-version == '' || github.event.inputs.app-version == null)) && 'latest' || github.event.inputs.app-version) }}
 
 
 
