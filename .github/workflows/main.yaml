@@ -24,10 +24,12 @@ jobs:
     steps:
     - name: Check app-version
       run: |
+        echo ${{ github.event.inputs.prod-release }}
+        echo ${{ github.event.inputs.app-version }}
         if [[ "${{ github.event.inputs.prod-release }}" == "false" && (-z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null") ]]; then
           echo "TAG=test-image:latest"
         else
-          echo "TAG=test-image:${{ github.event.inputs.app-version }}"
+          echo  ${{ format('TAG=test-image::{0}', ( inputs.prod-release && 'latest' ) || inputs.app-version)  }}
         fi
         echo "$TAG"
 
