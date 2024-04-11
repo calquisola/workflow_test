@@ -27,6 +27,8 @@ jobs:
       - name: Check app-version
         id: check_version # Important: Set an ID for referencing the output
         run: |
+          echo "Prod relase: ${{ toJson(github.event.inputs.prod-release) }}"
+          echo "App version: ${{ toJson(github.event.inputs.app-version) }}"
           if [ -z "${{ toJson(github.event.inputs.app-version) }}" ]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
