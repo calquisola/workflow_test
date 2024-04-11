@@ -27,17 +27,14 @@ jobs:
       - name: Check app-version
         id: check_version
         run: |
-          echo "prod-release ${{ github.event.inputs.prod-release }}"
-          echo "app version ${{ github.event.inputs.app-version }}"
-          if [[ -z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null" ]] && \
-             [[ -z "${{ github.event.inputs.prod-release }}" || "${{ github.event.inputs.prod-release }}" == "false" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
-            echo "version=latest" >> $GITHUB_OUTPUT
+          app_version="${{ github.event.inputs.app-version }}"
+          prod_release="${{ github.event.inputs.prod-release }}"
+          if [[ "$prod_release" == "true" ]] ||
+            ([[ -z "$app_version" || "$app_version" == "null" ]] &&
+              [[ -z "$prod_release" || "$prod_release" == "false" || "$prod_release" == "null" ]]); then
+              echo "value=latest" >> $GITHUB_OUTPUT
           else
-            if [[ "${{ github.event.inputs.prod-release }}" == "true" ]]; then
-              echo "version=latest" >> $GITHUB_OUTPUT
-            else
-              echo "version=${{ github.event.inputs.app-version }}" >> $GITHUB_OUTPUT
-            fi
+              echo "value=$app_version" >> $GITHUB_OUTPUT
           fi
       - name: Use the output
         run: |
