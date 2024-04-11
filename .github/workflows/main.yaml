@@ -28,7 +28,7 @@ jobs:
         id: check_version
         run: |
           if [[ -z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null" ]] && \
-             [[ "${{ github.event.inputs.prod-release }}" == "false" || -z "${{ github.event.inputs.prod-release }}" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
+             [[ "${{ github.event.inputs.prod-release }}" == "false" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
             echo "version=fabio-pogi" >> $GITHUB_OUTPUT
