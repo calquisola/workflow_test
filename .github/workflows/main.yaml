@@ -39,4 +39,4 @@ jobs:
           fi
       - name: Use the output
         run: |
-          echo "The app version is ${{ steps.check_version.outputs.version }}"
+          echo "The app version is ${{ steps.check_version.outputs.value }}"
