@@ -30,7 +30,7 @@ jobs:
           echo "prod-release ${{ github.event.inputs.prod-release }}"
           echo "app version ${{ github.event.inputs.app-version }}"
           if [[ -z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null" ]] && \
-             [[ "${{ github.event.inputs.prod-release }}" == "false" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
+             [[ -z "${{ github.event.inputs.prod-release }}" || "${{ github.event.inputs.prod-release }}" == "false" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
             echo "version=fabio-seb" >> $GITHUB_OUTPUT
