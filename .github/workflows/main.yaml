@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "Prod relase: ${{ toJson(github.event.inputs.prod-release) }}"
           echo "App version: ${{ toJson(github.event.inputs.app-version) }}"
-          if ["${{ toJson(github.event.inputs.app-version) }}" == "null" ]; then
+          if [[ "${{ github.event.inputs.app-version }}" == "null" ]] || [[ -z "${{ github.event.inputs.app-version }}" ]]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
             echo "version=fabio-pogi" >> $GITHUB_OUTPUT
