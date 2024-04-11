@@ -25,11 +25,10 @@ jobs:
       version: ${{ steps.set_version.outputs.version }} # Define the output for the job
     steps:
       - name: Check app-version
-        id: check_version # Important: Set an ID for referencing the output
+        id: check_version
         run: |
-          echo "Prod relase: ${{ toJson(github.event.inputs.prod-release) }}"
-          echo "App version: ${{ toJson(github.event.inputs.app-version) }}"
-          if [[ "${{ github.event.inputs.app-version }}" == "null" ]] || [[ -z "${{ github.event.inputs.app-version }}" ]]; then
+          if [[ -z "${{ github.event.inputs.app-version }}" || "${{ github.event.inputs.app-version }}" == "null" ]] && \
+             [[ "${{ github.event.inputs.prod-release }}" == "false" || -z "${{ github.event.inputs.prod-release }}" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
             echo "version=fabio-pogi" >> $GITHUB_OUTPUT
