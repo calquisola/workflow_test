@@ -25,13 +25,8 @@ jobs:
     steps:
     - name: Check app-version
       run: |
-        echo "test"
         echo '${{toJson(github.event.inputs)}}'
-        echo $PROD_RELEASE
-        echo $APP_VERSION
-      env:
-        PROD_RELEASE: ${{ inputs.prod-release }}
-        APP_VERSION: ${{ inputs.app-version }}
+
 
 
 
