@@ -33,7 +33,11 @@ jobs:
              [[ -z "${{ github.event.inputs.prod-release }}" || "${{ github.event.inputs.prod-release }}" == "false" || "${{ github.event.inputs.prod-release }}" == "null" ]]; then
             echo "version=latest" >> $GITHUB_OUTPUT
           else
-            echo ${{ format('{0}', ( github.events.inputs.prod-release && 'latest' ) || github.events.inputs.app-version) }}
+            if [[ "${{ github.event.inputs.prod-release }}" == "true" ]]; then
+              echo "version=latest" >> $GITHUB_OUTPUT
+            else
+              echo "version=${{ github.event.inputs.app-version }}" >> $GITHUB_OUTPUT
+            fi
           fi
       - name: Use the output
         run: |
