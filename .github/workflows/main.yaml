@@ -22,7 +22,7 @@ jobs:
     name: Test inputs
     runs-on: ubuntu-22.04
     outputs:
-      version: ${{ steps.set_version.outputs.version }} # Define the output for the job
+      version: ${{ steps.check_version.outputs.version }} # Define the output for the job
     steps:
       - name: Check app-version
         id: check_version
