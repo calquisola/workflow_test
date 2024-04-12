@@ -1,0 +1,28 @@
+name: Get app version from github event
+
+on:
+  workflow_call:
+    outputs:
+      value:
+        description: Value of app version
+        value: ${{ jobs.get-app-version.outputs.value }}
+
+jobs:
+  get-app-version:
+    name: Get App Version
+    runs-on: ubuntu-latest
+    outputs:
+      value: ${{ steps.app-version.outputs.value }}
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # All history for all refs
+          # Use branch name for PRs, otherwise main or tag; needed for app version
+          ref: >
+            ${{ (github.event_name == 'pull_request' || github.event_name == 'pull_request_review') &&
+            github.event.pull_request.head.ref || github.ref_name }}
+      - name: Get app version
+        id: app-version
+        run: echo "value=$(git describe --match "[0-9][0-9].[0-9][0-9].[0-9]*" --tags)" >> $GITHUB_OUTPUT
+        shell: bash

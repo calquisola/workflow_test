@@ -1,100 +1,38 @@
-name: Build, Test and Scan Image
+name: Retag Images
 
 on:
-  workflow_dispatch:
-    inputs:
-      image:
-        description: 'Select the image'
-        required: true
-        type: choice
-        options:
-          - node-base
-          - frontend
-          - backend
-          - postgresql
-          - memcached
   workflow_call:
     inputs:
-      image:
-        default: 'node-base'
-        description: True if should force build, else only if changed files on this ref
+      prod-release:
+        description: True if this is initiated from a production release
+        required: false
+        default: false
+        type: boolean
+      app-version:
+        description: App version value
+        required: false
         type: string
-        required: true
 jobs:
-  get-image-details:
-    runs-on: ubuntu-latest
+  test:
+    name: Test inputs
+    runs-on: ubuntu-22.04
     outputs:
-      image-details: ${{ steps.get-build-parameters.outputs.image-details }}
-      service-name: ${{ fromJSON(steps.get-build-parameters.outputs.image-details).service-name }}
-      context: ${{ fromJSON(steps.get-build-parameters.outputs.image-details).context }}
-      json-array: ${{ steps.format-json-array.outputs.value }}
+      version: ${{ steps.check_version.outputs.value }} # Define the output for the job
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v4
+      - name: Check app-version
+        id: check_version
+        run: |
+          app_version="${{ github.event.inputs.app-version }}"
+          prod_release="${{ github.event.inputs.prod-release }}"
 
-    - name: Set up for node GH Actions
-      uses: ./.github/actions/setup-node-actions
-
-    - name: Get image build parameter details
-      id: get-build-parameters
-      uses: ./.github/actions/get-image-details
-      with:
-        name: ${{ inputs.image}}
-    - name: Json Array
-      id: format-json-array
-      run: |
-        format=$(echo '[${{ steps.get-build-parameters.outputs.image-details }}]' | jq .)
-        echo "value<<EOF" >> $GITHUB_OUTPUT
-        echo "$format" >> $GITHUB_OUTPUT
-        echo "EOF" >> $GITHUB_OUTPUT
-
-  # print-array:
-  #   runs-on: ubuntu-latest
-  #   needs: [get-image-details]
-  #   strategy:
-  #     matrix:
-  #       include: ${{ fromJSON(needs.get-image-details.outputs.json-array) }}
-  #   steps:
-  #   - name: Check out code
-  #     uses: actions/checkout@v2
-
-  #   - name: Parse Image Details
-  #     id: print-array
-  #     run: |
-  #       echo "Deploying to ${{ matrix.service-name }}"
-
-  build:
-    runs-on: ubuntu-latest
-    needs: [get-image-details]
-    steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-
-    - name: Parse Image Details
-      id: parse-json
-      run: |
-        echo "Deploying to ${{ needs.get-image-details.outputs.service-name }}"
-        echo "Deploying to ${{ needs.get-image-details.outputs.context }}"
-        echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).service-name }}"
-        echo "Deploying to ${{ fromJSON(needs.get-image-details.outputs.image-details).docker-file-path }}"
-        echo "Json Array is ${{ needs.get-image-details.outputs.json-array }}"
-
-
-  # build-images:
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       service-name: [frontend, backend, postgres]
-
-  #   name: Build ${{ matrix.service-name }} image
-  #   steps:
-  #     - name: Check out repo
-  #       uses: actions/checkout@v4
-  #       with:
-  #         # To compute dirty files need fetch-depth=2 to grab previous commit on it
-  #         fetch-depth: 2
-  #     - name: Display Service Name
-  #       id: display
-  #       run: |
-  #         echo "Deploying to ${{ matrix.service-name }}"
-  #         echo "Deploying to ${{ matrix.service-name }}"
+          # Simplify logic
+          if [[ "$prod_release" == "true" ]] ||
+            ([[ -z "$app_version" || "$app_version" == "null" ]] &&
+              [[ -z "$prod_release" || "$prod_release" == "false" || "$prod_release" == "null" ]]); then
+              echo "value=latest" >> $GITHUB_OUTPUT
+          else
+              echo "value=$app_version" >> $GITHUB_OUTPUT
+          fi
+      - name: Use the output
+        run: |
+          echo "The app version is ${{ steps.check_version.outputs.value }}"

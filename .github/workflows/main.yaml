@@ -7,37 +7,15 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
-    inputs:
-      prod-release:
-        description: True if this is initiated from a production release
-        required: false
-        default: false
-        type: boolean
-      app-version:
-        description: App version value
-        required: false
-        type: string
-jobs:
-  test:
-    name: Test inputs
-    runs-on: ubuntu-22.04
-    outputs:
-      version: ${{ steps.check_version.outputs.value }} # Define the output for the job
-    steps:
-      - name: Check app-version
-        id: check_version
-        run: |
-          app_version="${{ github.event.inputs.app-version }}"
-          prod_release="${{ github.event.inputs.prod-release }}"
 
-          # Simplify logic
-          if [[ "$prod_release" == "true" ]] ||
-            ([[ -z "$app_version" || "$app_version" == "null" ]] &&
-              [[ -z "$prod_release" || "$prod_release" == "false" || "$prod_release" == "null" ]]); then
-              echo "value=latest" >> $GITHUB_OUTPUT
-          else
-              echo "value=$app_version" >> $GITHUB_OUTPUT
-          fi
-      - name: Use the output
-        run: |
-          echo "The app version is ${{ steps.check_version.outputs.value }}"
+jobs:
+  get-app-version:
+    uses: ./.github/workflows/get-app-version.yaml
+
+  test:
+    name: Test app-version
+    needs: [get-app-version]
+    uses: ./.github/workflows/workflow1.yaml
+    with:
+      app-version: ${{ needs.get-app-version.outputs.value }}
+
