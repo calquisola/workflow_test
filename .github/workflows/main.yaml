@@ -12,6 +12,16 @@ jobs:
   get-app-version:
     uses: ./.github/workflows/get-app-version.yaml
 
+  print-app-verison:
+    name: Print App Version
+    runs-on: ubuntu-latest
+    needs: [get-app-version]
+    steps:
+      - name: print1
+        id: print-app-version
+        run: echo ${{ needs.get-app-version.outputs.value }}
+        shell: bash
+
   test:
     name: Test app-version
     needs: [get-app-version]
