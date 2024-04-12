@@ -17,5 +17,5 @@ jobs:
     needs: [get-app-version]
     uses: ./.github/workflows/workflow1.yaml
     with:
-      app-version: ${{ needs.get-app-version.outputs.value }}
+      app-version: "version1"
 
