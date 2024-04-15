@@ -24,6 +24,7 @@ jobs:
         run: |
           app_version="${{ inputs.app-version }}"
           prod_release="${{ inputs.prod-release }}"
+          run_id="{{github.run_id}}"
 
           # Simplify logic
           if [[ "$prod_release" == "true" ]] ||
