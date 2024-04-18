@@ -17,7 +17,7 @@ jobs:
     name: Test inputs
     runs-on: ubuntu-22.04
     outputs:
-      version: ${{ steps.set-latest.outputs.value }} || ${{ steps.set-version.outputs.value }}
+      version: ${{ steps.set-latest.outputs.value }}${{ steps.set-version.outputs.value }}
     steps:
     - name: Set output to 'latest'
       id: set-latest
