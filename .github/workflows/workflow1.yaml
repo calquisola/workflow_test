@@ -22,15 +22,15 @@ jobs:
     - name: Set output to 'latest'
       id: set-latest
       if: >-
-        inputs.prod-release == 'true' ||
+        inputs.prod-release ||
         (inputs.app-version == '' || inputs.app-version == 'null') &&
-        (inputs.prod-release == '' || inputs.prod-release == 'false' || inputs.prod-release == 'null')
+        (!inputs.prod-release || inputs.prod-release == 'null')
       run: echo "value=latest" >> $GITHUB_OUTPUT
 
     - name: Set output to app version
       id: set-version
       if: >-
-        inputs.prod-release != 'true' &&
+        !inputs.prod-release &&
         inputs.app-version != '' && inputs.app-version != 'null'
       run: echo "value=${{ inputs.app-version }}" >> $GITHUB_OUTPUT
 
