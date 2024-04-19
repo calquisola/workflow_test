@@ -27,5 +27,4 @@ jobs:
     needs: [get-app-version]
     uses: ./.github/workflows/workflow1.yaml
     with:
-      prod-release: true
       app-version: 'my-version'
