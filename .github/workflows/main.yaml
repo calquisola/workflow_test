@@ -26,5 +26,3 @@ jobs:
     name: Test app-version
     needs: [get-app-version]
     uses: ./.github/workflows/workflow1.yaml
-    with:
-      app-version: 'my-version'
