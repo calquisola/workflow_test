@@ -23,21 +23,21 @@ jobs:
       - name: Set tag to 'latest' on prod relase
         id: set-latest-prod-release
         if: inputs.prod-release
-        run: echo "value=latest" >> $GITHUB_ENV
+        run: echo "tag=latest" >> $GITHUB_ENV
       # set tag to latest by default if app_version and prod-release are not set
       - name: Set tag to 'latest' by default
         id: set-latest-default
         if: >-
           (inputs.app-version == '' || inputs.app-version == 'null') &&
           (!inputs.prod-release || inputs.prod-release == 'null')
-        run: echo "value=latest" >> $GITHUB_ENV
+        run: echo "tag=latest" >> $GITHUB_ENV
       # set tag to app_version if it is set
       - name: Set tag to app version
         id: set-version
         if: >-
           !inputs.prod-release &&
           inputs.app-version != '' && inputs.app-version != 'null'
-        run: echo "value=${{ inputs.app-version }}" >> $GITHUB_ENV
+        run: echo "tag=${{ inputs.app-version }}" >> $GITHUB_ENV
 
   print-version:
     runs-on: ubuntu-22.04
