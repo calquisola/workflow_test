@@ -12,8 +12,15 @@ jobs:
 
   print-variable:
     name: Print App Version
+    strategy:
+      matrix:
+        env:
+          - qa
+          - prod
     runs-on: ubuntu-latest
     steps:
       - name: print
-        run: echo ${{ vars.MY_REPO_VAR }}
+        run: |
+          echo ${{ vars.MY_REPO_VAR }}
+          echo echo "value=s3://embark-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
         shell: bash
