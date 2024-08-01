@@ -19,15 +19,11 @@ jobs:
           - prod
     runs-on: ubuntu-latest
     steps:
-      - name: Use ArgoCD bucket
-        if: ${{ vars.IS_APP_DEPRECATED }}
+      - name: Determine Bucket
         run: |
-          echo ${{ vars.IS_APP_DEPRECATED }}
-          echo echo "value=s3://codeva-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
-        shell: bash
-      - name: Use non ArgoCD bucket
-        if: ${{ !vars.IS_APP_DEPRECATED }}
-        run: |
-          echo ${{ !vars.IS_APP_DEPRECATED }}
-          echo echo "value=s3://embark-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
+          if [ "${{ vars.IS_APP_DEPRECATED }}" == "true" ]; then
+            echo "value=s3://codeva-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
+          else
+            echo "value=s3://embark-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
+          fi
         shell: bash
