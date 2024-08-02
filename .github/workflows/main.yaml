@@ -15,14 +15,16 @@ jobs:
     strategy:
       matrix:
         env:
+          - dev
           - qa
+          - sandbox
           - prod
     runs-on: ubuntu-latest
     steps:
       - name: Determine Bucket
         run: |
           if [ "${{ vars.IS_APP_DEPRECATED }}" == "true" ]; then
-            echo "value=s3://codeva-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
+            echo "value=s3://codeva-techdocs-storage-${{ matrix.env }}"
           else
             echo "value=s3://embark-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
           fi
