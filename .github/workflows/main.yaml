@@ -22,6 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Determine Bucket
+        if: ${{ vars.IS_APP_DEPRECATED && matrix.env == 'prod' }}
         run: |
           if [ "${{ vars.IS_APP_DEPRECATED }}" == "true" ]; then
             echo "value=s3://codeva-techdocs-storage-${{ matrix.env }}"
