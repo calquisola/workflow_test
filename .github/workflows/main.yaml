@@ -49,9 +49,9 @@ jobs:
     name: Print App Version
     runs-on: ubuntu-latest
     steps:
-      - name: Determine Bucket
+      - name: Determine Source Bucket
         run: |
-          echo s3://${{ fromJson(inputs.sourceUseArgo) && vars.TECHDOCS_S3_BUCKET_NAME || vars.AWS_BUCKET_NAME}}
+          echo s3://${{ fromJson(inputs.sourceUseArgo || vars.IS_APP_DEPRECATED ) && vars.TECHDOCS_S3_BUCKET_NAME || vars.AWS_BUCKET_NAME}}
 
 
       #   if: ${{ vars.IS_APP_DEPRECATED && matrix.env != 'prod' }}
