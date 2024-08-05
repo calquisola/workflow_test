@@ -6,6 +6,24 @@ on:
       - main
   pull_request:
     branches: [main]
+  workflow_call:
+    inputs:
+      sourceEnvironment:
+        description: Source Environment
+        default: Prod
+        type: string
+      sourceUseArgo:
+        description: Use ArgoCD App
+        default: false
+        type: boolean
+      destEnvironment:
+        description: Destination Environment
+        default: dev
+        type: string
+      destUseArgo:
+        description: Use ArgoCD App
+        default: false
+        type: boolean
   workflow_dispatch:
     inputs:
       sourceEnvironment:
