@@ -20,7 +20,7 @@ jobs:
           - sandbox
           - prod
         enable-prod:
-          - ${{ vars.IS_APP_DEPRECATED }}
+          - false
         exclude:
           - env: prod
             enable-prod: false
