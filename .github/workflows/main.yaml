@@ -6,59 +6,26 @@ on:
       - main
   pull_request:
     branches: [main]
-  workflow_call:
-    inputs:
-      sourceEnvironment:
-        description: Source Environment
-        default: Prod
-        type: string
-      sourceUseArgo:
-        description: Use ArgoCD App
-        default: false
-        type: boolean
-      destEnvironment:
-        description: Destination Environment
-        default: dev
-        type: string
-      destUseArgo:
-        description: Use ArgoCD App
-        default: false
-        type: boolean
   workflow_dispatch:
-    inputs:
-      sourceEnvironment:
-        description: Source Environment
-        default: Prod
-        type: environment
-      sourceUseArgo:
-        description: Use ArgoCD App
-        default: false
-        type: boolean
-      destEnvironment:
-        description: Destination Environment
-        default: dev
-        type: environment
-      destUseArgo:
-        description: Use ArgoCD App
-        default: false
-        type: boolean
-
 
 jobs:
+
   print-variable:
     name: Print App Version
+    strategy:
+      matrix:
+        env:
+          - dev
+          - qa
+          - sandbox
+          - prod
+        enable-prod:
+          - ${{ vars.IS_APP_DEPRECATED }}
+        exclude:
+          - env: prod
+            enable-prod: false
     runs-on: ubuntu-latest
     steps:
-      - name: Determine Source Bucket
-        run: |
-          echo s3://${{ fromJson(inputs.sourceUseArgo || vars.IS_APP_DEPRECATED ) && vars.TECHDOCS_S3_BUCKET_NAME || vars.AWS_BUCKET_NAME}}
-
-
-      #   if: ${{ vars.IS_APP_DEPRECATED && matrix.env != 'prod' }}
-      #   run: |
-      #     if [ "${{ vars.IS_APP_DEPRECATED }}" == "true" ]; then
-      #       echo "value=s3://codeva-techdocs-storage-${{ matrix.env }}"
-      #     else
-      #       echo "value=s3://embark-techdocs-storage-${{ matrix.env == 'prod' && 'prod' || 'nonprod' }}"
-      #     fi
-      #   shell: bash
+      - name: Determine Bucket
+        run: echo "value=s3://codeva-techdocs-storage-${{ matrix.env }}"
+        shell: bash
