@@ -20,7 +20,7 @@ jobs:
           - sandbox
           - prod
         enable-prod:
-          - true
+          - false
         exclude:
           - env: prod
             enable-prod: true
