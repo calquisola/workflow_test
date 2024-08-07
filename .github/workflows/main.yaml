@@ -20,10 +20,10 @@ jobs:
           - sandbox
           - prod
         enable-prod:
-          - false
+          - ${{ IS_APP_DEPRECATED }}
         exclude:
           - env: prod
-            enable-prod: false
+            enable-prod: true
     runs-on: ubuntu-latest
     steps:
       - name: Determine Bucket
