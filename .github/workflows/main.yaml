@@ -18,9 +18,9 @@ jobs:
           - dev
           - qa
           - sandbox
-          - prod
-        enable-prod:
-          - ${{ vars.IS_APP_DEPRECATED }}
+        include:
+          - env: prod
+            enable-prod: ${{ vars.IS_APP_DEPRECATED == 'false' }}
         exclude:
           - env: prod
             enable-prod: true
