@@ -23,7 +23,7 @@ jobs:
           - ${{ vars.IS_APP_DEPRECATED }}
         exclude:
           - env: prod
-            enable-prod: true
+            enable-prod: 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Determine Bucket
