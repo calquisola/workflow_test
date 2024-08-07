@@ -21,7 +21,7 @@ jobs:
         enable-prod: ${{ vars.IS_APP_DEPRECATED }}
         include:
           - env: prod
-            enable-prod: ${{ vars.IS_APP_DEPRECATED == 'false' }}
+            enable-prod: false
     runs-on: ubuntu-latest
     steps:
       - name: Determine Bucket
