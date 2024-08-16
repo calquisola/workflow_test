@@ -25,8 +25,8 @@ jobs:
           - env: prod
             enable-prod: 'true'
     runs-on: ubuntu-latest
-    environment: ${{ matrix.env}}
+    environment: ${{ matrix.env }}
     steps:
       - name: Print environment value
-        run: echo "{{ vars.IS_APP_DEPRECATED }}"
+        run: echo "${{ vars.IS_APP_DEPRECATED }}"
         shell: bash
