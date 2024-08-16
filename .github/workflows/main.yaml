@@ -34,9 +34,11 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ matrix.env }}
     steps:
-      - name: Determine Dev APP Deprecated value
+      - name: Determine App Deprecated Value
         id: determine-app-deprecated
-        run: echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_OUTPUT
+          echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}"
 
   print-value:
     name: Print Value
@@ -49,9 +51,14 @@ jobs:
           - qa
           - sandbox
           - prod
+        enable-prod:
+          - ${{ vars.IS_APP_DEPRECATED }}
+        exclude:
+          - env: prod
+            enable-prod: 'true'
     steps:
       - name: Print
-        run: echo  "${{ needs.determine-deprecation.outputs[matrix.env] }}"
+        run: echo  "${{ fromJson(needs.determine-deprecation.outputs[matrix.env]) }}"
 
   # print-value:
   #   name: Print Value
