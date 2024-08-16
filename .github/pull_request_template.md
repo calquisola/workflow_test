@@ -10,5 +10,5 @@
 <!-- Start writing below -->
 
 # Checklist
-- [ ] Review if and E2E test is necessary
+- [ ] Review if an E2E test is necessary
 - [ ] Review if a continuous monitor is necessary
