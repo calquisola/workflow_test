@@ -27,6 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ matrix.env }}
     steps:
-      - name: Print environment value
-        run: echo "${{ vars.IS_APP_DEPRECATED }}"
+      - name: Determine APP Deprecated value
+        run: echo "IS_APP_DEPRECATED=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_ENV
+        shell: bash
+      - name: Print APP Deprecated value
+        run: echo "${{ env.IS_APP_DEPRECATED }}"
         shell: bash
