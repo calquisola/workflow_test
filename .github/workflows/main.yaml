@@ -25,7 +25,8 @@ jobs:
           - env: prod
             enable-prod: 'true'
     runs-on: ubuntu-latest
+    environment: ${{ matrix.env}}
     steps:
-      - name: Determine Bucket
-        run: echo "value=s3://codeva-techdocs-storage-${{ matrix.env }}"
+      - name: Print environment value
+        run: echo "{{ vars.IS_APP_DEPRECATED }}"
         shell: bash
