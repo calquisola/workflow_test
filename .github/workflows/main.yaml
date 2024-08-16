@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  print-variable:
+  determine-deprecation:
     name: Print App Version
     strategy:
       matrix:
@@ -24,12 +24,25 @@ jobs:
         exclude:
           - env: prod
             enable-prod: 'true'
+    outputs:
+      dev: ${{ steps.determine-app-deprecated.outputs.dev }}
+      qa: ${{ steps.determine-app-deprecated.outputs.qa }}
+      sandbox: ${{ steps.determine-app-deprecated.outputs.sandbox }}
+      prod: ${{ steps.determine-app-deprecated.outputs.prod }}
     runs-on: ubuntu-latest
     environment: ${{ matrix.env }}
     steps:
-      - name: Determine APP Deprecated value
-        run: echo "IS_APP_DEPRECATED=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_ENV
-        shell: bash
-      - name: Print APP Deprecated value
-        run: echo "${{ env.IS_APP_DEPRECATED }}"
-        shell: bash
+      - name: Determine Dev APP Deprecated value
+        id: determine-app-deprecated
+        run: echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_OUTPUT
+
+  print-value:
+    name: Print Value
+    runs-on: ubuntu-latest
+    needs: determine-deprecation
+    steps:
+      - name: Print
+        run: |
+          echo "dev: ${{ needs.determine-deprecation.outputs.dev }}
+          echo "qa: ${{ needs.determine-deprecation.outputs.qa }}
+          echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}
