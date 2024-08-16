@@ -43,6 +43,6 @@ jobs:
     steps:
       - name: Print
         run: |
-          echo "dev: ${{ needs.determine-deprecation.outputs.dev }}
-          echo "qa: ${{ needs.determine-deprecation.outputs.qa }}
-          echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}
+          echo "dev: ${{ needs.determine-deprecation.outputs.dev }}"
+          echo "qa: ${{ needs.determine-deprecation.outputs.qa }}"
+          echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}"
