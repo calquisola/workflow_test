@@ -10,6 +10,8 @@ on:
 
 jobs:
 
+  # Unfortunately, we can't reuse a workflow in a composite actions
+  # So we have to use this hideaous workaround
   determine-deprecation:
     name: Print App Version
     strategy:
@@ -40,9 +42,24 @@ jobs:
     name: Print Value
     runs-on: ubuntu-latest
     needs: determine-deprecation
+    strategy:
+      matrix:
+        env:
+          - dev
+          - qa
+          - sandbox
+          - prod
     steps:
       - name: Print
-        run: |
-          echo "dev: ${{ needs.determine-deprecation.outputs.dev }}"
-          echo "qa: ${{ needs.determine-deprecation.outputs.qa }}"
-          echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}"
+        run: echo  "${{ needs.determine-deprecation.outputs[matrix.env] }}"
+
+  # print-value:
+  #   name: Print Value
+  #   runs-on: ubuntu-latest
+  #   needs: determine-deprecation
+  #   steps:
+  #     - name: Print
+  #       run: |
+  #         echo "dev: ${{ needs.determine-deprecation.outputs.dev }}"
+  #         echo "qa: ${{ needs.determine-deprecation.outputs.qa }}"
+  #         echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}"
