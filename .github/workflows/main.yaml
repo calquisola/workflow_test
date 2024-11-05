@@ -9,64 +9,21 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  # Unfortunately, we can't reuse a workflow in a composite actions
-  # So we have to use this hideaous workaround
-  determine-deprecation:
-    name: Print App Version
-    strategy:
-      matrix:
-        env:
-          - dev
-          - qa
-          - sandbox
-          - prod
-        enable-prod:
-          - ${{ vars.IS_APP_DEPRECATED }}
-        exclude:
-          - env: prod
-            enable-prod: 'true'
+  create-json:
+    runs-on: ubuntu-latest
     outputs:
-      dev: ${{ steps.determine-app-deprecated.outputs.dev }}
-      qa: ${{ steps.determine-app-deprecated.outputs.qa }}
-      sandbox: ${{ steps.determine-app-deprecated.outputs.sandbox }}
-      prod: ${{ steps.determine-app-deprecated.outputs.prod }}
-    runs-on: ubuntu-latest
-    environment: ${{ matrix.env }}
+      json-output: ${{ steps.create-json.outputs.json }}
     steps:
-      - name: Determine App Deprecated Value
-        id: determine-app-deprecated
+      - name: Generate JSON Object
+        id: create-json
         run: |
-          echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}" >> $GITHUB_OUTPUT
-          echo "${{ matrix.env }}=${{ vars.IS_APP_DEPRECATED }}"
+          echo '{"message": "Hello from the first job!", "value": 42}' >> GITHUB_OUTPUT
+        shell: bash
 
-  print-value:
-    name: Print Value
+  use-json:
+    needs: create-json
     runs-on: ubuntu-latest
-    needs: determine-deprecation
-    strategy:
-      matrix:
-        env:
-          - dev
-          - qa
-          - sandbox
-          - prod
-        enable-prod:
-          - ${{ vars.IS_APP_DEPRECATED }}
-        exclude:
-          - env: prod
-            enable-prod: 'true'
     steps:
-      - name: Print
-        run: echo  "${{ fromJson(needs.determine-deprecation.outputs[matrix.env]) }}"
-
-  # print-value:
-  #   name: Print Value
-  #   runs-on: ubuntu-latest
-  #   needs: determine-deprecation
-  #   steps:
-  #     - name: Print
-  #       run: |
-  #         echo "dev: ${{ needs.determine-deprecation.outputs.dev }}"
-  #         echo "qa: ${{ needs.determine-deprecation.outputs.qa }}"
-  #         echo "sandbox: ${{ needs.determine-deprecation.outputs.sandbox }}"
+      - name: Print JSON from First Job
+        run: |
+          echo "Received JSON: ${{ needs.create-json.outputs.json-output }}"
