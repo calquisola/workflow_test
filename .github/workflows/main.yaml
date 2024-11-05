@@ -17,7 +17,7 @@ jobs:
       - name: Generate JSON Object
         id: create-json
         run: |
-          echo "json=test" >> "$GITHUB_OUTPUT"
+          echo 'json={"message": "Hello from the first job!", "value": 42}' >> "$GITHUB_OUTPUT"
         shell: bash
 
   use-json:
