@@ -26,4 +26,4 @@ jobs:
     steps:
       - name: Print JSON from First Job
         run: |
-          echo ${{ fromJSON(needs.create-json.outputs.json-output) }}
+          echo ${{ needs.create-json.outputs.json-output }}
