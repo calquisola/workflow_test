@@ -17,7 +17,13 @@ jobs:
       - name: Generate JSON Object
         id: create-json
         run: |
-          echo 'json=[{"image": "ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge", "signed": false}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/node-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/frontend:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/backend:edge", "signed": false}]' >> "$GITHUB_OUTPUT"
+          echo 'json=[
+            {"image": "ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge", "signed": false},
+            {"image": "ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge", "signed": true},
+            {"image": "ghcr.io/department-of-veterans-affairs/code-va/node-base:edge", "signed": true},
+            {"image": "ghcr.io/department-of-veterans-affairs/code-va/frontend:edge", "signed": true},
+            {"image": "ghcr.io/department-of-veterans-affairs/code-va/backend:edge", "signed": false}
+          ]' >> "$GITHUB_OUTPUT"
         shell: bash
 
   use-json:
