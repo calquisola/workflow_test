@@ -17,7 +17,7 @@ jobs:
       - name: Generate JSON Object
         id: create-json
         run: |
-          echo 'json=test' >> GITHUB_OUTPUT
+          echo "json=test" >> "$GITHUB_OUTPUT"
         shell: bash
 
   use-json:
