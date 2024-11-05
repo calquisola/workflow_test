@@ -26,4 +26,5 @@ jobs:
     steps:
       - name: Print JSON from First Job
         run: |
-          echo ${{ fromJSON(needs.create-json.outputs.json-output) | jq '[.[] | select(.signed == true)]' }}
+          echo '${{ needs.create-json.outputs.json-output }}' | jq '[.[] | select(.signed == true)]'
+        shell: bash
