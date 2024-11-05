@@ -9,10 +9,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-json:
+
+  secrel:
     runs-on: ubuntu-latest
     outputs:
-      json-output: ${{ steps.create-json.outputs.json }}
+      image-signing-results: ${{ steps.create-json.outputs.json }}
     steps:
       - name: Generate JSON Object
         id: create-json
@@ -20,11 +21,11 @@ jobs:
           echo 'json=[{"image": "ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge", "signed": false}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/node-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/frontend:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/backend:edge", "signed": false}]' >> "$GITHUB_OUTPUT"
         shell: bash
 
-  use-json:
-    needs: create-json
+  check-image-signed:
+    needs: secrel
     runs-on: ubuntu-latest
     steps:
       - name: Print JSON from First Job
         run: |
-          echo '${{ needs.create-json.outputs.json-output }}' | jq '[.[] | select(.signed == true)]'
+          echo '${{ needs.secrel.outputs.image-signing-results }}' | jq '[.[] | select(.signed == true)]'
         shell: bash
