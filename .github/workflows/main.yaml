@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-image-list:
+  get-images-list:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.create-json.outputs.json }}
