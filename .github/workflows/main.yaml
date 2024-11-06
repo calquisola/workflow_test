@@ -37,16 +37,17 @@ jobs:
     if: ${{ !inputs.skip-scan }}
     runs-on: ubuntu-22.04
     strategy:
+      fail-fast: false
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
-    # env:
-    #   IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
-    #   IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
+    env:
+      IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+      IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
     steps:
       - name: Check if image was signed
         run: >
-          echo ${{ needs.secrel.outputs.image-signing-results }} |
-          jq -e --arg i ${{ matrix.tagged-ghcr-name }} 'contains([{
+          echo $IMAGE_RESULTS |
+          jq -e --arg i $IMAGE_NAME 'contains([{
           "image":$i,
           "signed":true
           }])'
