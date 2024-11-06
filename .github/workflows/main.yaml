@@ -40,6 +40,12 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
     steps:
+      - name: Check if IMAGE_RESULTS is defined
+        if: ${{ env.IMAGE_RESULTS != '' }}
+        env:
+          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+        run: |
+          echo "IMAGE_RESULTS is defined."
       - name: Check if image was signed
         env:
           IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results}}
