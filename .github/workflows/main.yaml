@@ -9,23 +9,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  job1:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Run a Command
-        run: echo "Running Job 1"
-      - name: Simulate Cancellation
+      - name: Step 1 - Run Main Task
+        run: echo "Running main task in job..."
+
+      - name: Step 2 - Simulate Cancellation by Failure
+        id: simulate_cancellation
         run: |
-          echo "Simulating job cancellation..."
+          echo "Simulating cancellation by forcing a failure..."
           exit 1
 
-  job2:
-    runs-on: ubuntu-latest
-    needs: job1
-    if: failure()
-    steps:
-      - name: Run if Job 1 is cancelled
-        run: echo "Job 1 was cancelled, so Job 2 is running."
+      - name: Step 3 - Run if Previous Step Was 'Cancelled'
+        if: failure()
+        run: echo "Previous step failed, simulating job cancellation handling."
+  # job1:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Run a Command
+  #       run: echo "Running Job 1"
+  #     - name: Simulate Cancellation
+  #       run: |
+  #         echo "Simulating job cancellation..."
+  #         exit 1
+
+  # job2:
+  #   runs-on: ubuntu-latest
+  #   needs: job1
+  #   if: failure()
+  #   steps:
+  #     - name: Run if Job 1 is cancelled
+  #       run: echo "Job 1 was cancelled, so Job 2 is running."
 
   # get-images-list:
   #   runs-on: ubuntu-latest
