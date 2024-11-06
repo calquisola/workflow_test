@@ -40,24 +40,48 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
     steps:
-      # - name: Simulate job cancellation if service is backend
-      #   if: ${{ matrix.service-name == 'frontend' }}
-      #   run: |
-      #     echo "Simulating job cancellation..."
-      #     exit 1
+      - name: Check if IMAGE_RESULTS is defined
+        if: ${{ env.IMAGE_RESULTS != '' }}
+        env:
+          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+        run: |
+          echo "IMAGE_RESULTS is defined."
+
+      - name: Fail if IMAGE_RESULTS is empty
+        if: ${{ env.IMAGE_RESULTS == '' }}
+        run: |
+          echo "Error: IMAGE_RESULTS is empty or undefined."
+          exit 1
+
+      - name: Validate JSON format of IMAGE_RESULTS
+        if: ${{ env.IMAGE_RESULTS != '' }}
+        env:
+          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+        run: |
+          echo "$IMAGE_RESULTS" | jq empty || exit 1
+
+      - name: Check if IMAGE_NAME is defined
+        if: ${{ env.IMAGE_NAME != '' }}
+        env:
+          IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
+        run: |
+          echo "IMAGE_NAME is defined."
+
+      - name: Fail if IMAGE_NAME is empty
+        if: ${{ env.IMAGE_NAME == '' }}
+        run: |
+          echo "Error: IMAGE_NAME is empty or undefined."
+          exit 1
 
       - name: Check if image was signed
-        if: ${{ matrix.service-name != 'frontend' }}
+        if: ${{ env.IMAGE_RESULTS != '' && env.IMAGE_NAME != '' }}
         env:
           IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
           IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
         run: |
-          echo "$IMAGE_RESULTS" | grep -q "\"image\":\"$IMAGE_NAME\"" && grep -q "\"signed\":true"
-          # echo $IMAGE_RESULTS |
-          # jq -e --arg i $IMAGE_NAME 'contains([{
-          #   "image":$i,
-          #   "signed":true
-          # }])'
-
-
-
+          if echo "$IMAGE_RESULTS" | jq -e --arg i "$IMAGE_NAME" '.[] | select(.image == $i and .signed == true)' > /dev/null; then
+            echo "Image '$IMAGE_NAME' is signed."
+          else
+            echo "Image '$IMAGE_NAME' is not signed or not found in IMAGE_RESULTS."
+            exit 1
+          fi
