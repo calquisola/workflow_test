@@ -47,10 +47,10 @@ jobs:
         if: ${{ $IMAGE_RESULTS != '' }}
         run: |
           echo "IMAGE_RESULTS is defined."
-      # - name: Check if image was signed
-      #   run: >
-      #     echo $IMAGE_RESULTS |
-      #     jq -e --arg i $IMAGE_NAME 'contains([{
-      #     "image":$i,
-      #     "signed":true
-      #     }])'
+      - name: Check if image was signed
+        run: >
+          echo $IMAGE_RESULTS |
+          jq -e --arg i $IMAGE_NAME 'contains([{
+          "image":$i,
+          "signed":true
+          }])'
