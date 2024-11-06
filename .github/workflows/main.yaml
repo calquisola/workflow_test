@@ -40,7 +40,7 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
     env:
-      IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }
+      IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
       IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
     steps:
       - name: Check if IMAGE_RESULTS is defined
