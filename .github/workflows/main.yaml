@@ -20,6 +20,7 @@ jobs:
         run: |
           echo "Simulating cancellation by forcing a failure..."
           exit 1
+        continue-on-error: true
 
       - name: Step 3 - Run if Previous Step Was 'Cancelled'
         if: failure()
