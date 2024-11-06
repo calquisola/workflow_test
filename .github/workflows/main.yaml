@@ -45,8 +45,8 @@ jobs:
     steps:
       - name: Check if image was signed
         run: >
-          echo env.IMAGE_RESULTS |
-          jq -e --arg i env.IMAGE_NAME 'contains([{
+          echo $IMAGE_RESULTS |
+          jq -e --arg i $IMAGE_NAME 'contains([{
           "image":$i,
           "signed":true
           }])'
