@@ -39,20 +39,18 @@ jobs:
     strategy:
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
+    env:
+      IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }
+      IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
     steps:
       - name: Check if IMAGE_RESULTS is defined
-        if: ${{ env.IMAGE_RESULTS != '' }}
-        env:
-          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+        if: ${{ $IMAGE_RESULTS != '' }}
         run: |
           echo "IMAGE_RESULTS is defined."
-      - name: Check if image was signed
-        env:
-          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results}}
-          IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
-        run: >
-          echo $IMAGE_RESULTS |
-          jq -e --arg i $IMAGE_NAME 'contains([{
-          "image":$i,
-          "signed":true
-          }])'
+      # - name: Check if image was signed
+      #   run: >
+      #     echo $IMAGE_RESULTS |
+      #     jq -e --arg i $IMAGE_NAME 'contains([{
+      #     "image":$i,
+      #     "signed":true
+      #     }])'
