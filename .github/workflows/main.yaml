@@ -9,87 +9,55 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  get-images-list:
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.create-json.outputs.json }}
     steps:
-      - name: Step 1 - Run Main Task
-        run: echo "Running main task in job..."
-
-      - name: Step 2 - Simulate Cancellation by Failure
-        id: simulate_cancellation
+      - name: Generate JSON Object
+        id: create-json
         run: |
-          echo "Simulating cancellation by forcing a failure..."
-          exit 1
-        continue-on-error: true
+          echo 'json=[{"named-dockerfile":true,"path-dependencies":"./Dockerfile.backend,app-config.yaml,catalog-entities.yaml,provider-dashboard.config.yaml,certs/**,package.json,packages/backend/**,plugins/**,yarn.lock,node-base/Dockerfile","service-name":"backend","path":".","is-argocd-service":true,"argocd-workload-resource":"statefulSet","node-base":true,"type":"app","argocd-service-name":"backend","context":".","docker-file-path":"./Dockerfile.backend","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/backend:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/backend","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"named-dockerfile":true,"path-dependencies":"./Dockerfile.frontend,app-config.yaml,package.json,packages/app/**,plugins/**,yarn.lock,node-base/Dockerfile","service-name":"frontend","path":".","is-argocd-service":true,"argocd-workload-resource":"deployment","node-base":true,"type":"app","argocd-service-name":"frontend","context":".","docker-file-path":"./Dockerfile.frontend","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/frontend:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/frontend","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"context":"node-base","service-name":"node-base","path":"node-base","is-base-image":true,"type":"base","argocd-service-name":"node-base","docker-file-path":"node-base/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/node-base","path-dependencies":"node-base/Dockerfile","base-image":""},{"context":"runner/base","service-name":"runner-base","path":"runner/base","node-base":true,"type":"runner","argocd-service-name":"runner-base","docker-file-path":"runner/base/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/runner-base","path-dependencies":"runner/base/Dockerfile,node-base/Dockerfile","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"service-name":"self-hosted-runner-e2e","path":"runner/e2e","argocd-workload-resource":"deployment","node-base":true,"type":"runner","argocd-service-name":"self-hosted-runner-e2e","context":".","docker-file-path":"runner/e2e/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e","path-dependencies":"runner/e2e/Dockerfile,node-base/Dockerfile","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"}]' >> "$GITHUB_OUTPUT"
+        shell: bash
 
-      - name: Step 3 - Run if Previous Step Was 'Cancelled'
-        if: failure()
-        run: echo "Previous step failed, simulating job cancellation handling."
-  # job1:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Run a Command
-  #       run: echo "Running Job 1"
-  #     - name: Simulate Cancellation
-  #       run: |
-  #         echo "Simulating job cancellation..."
-  #         exit 1
+  secrel:
+    runs-on: ubuntu-latest
+    outputs:
+      image-signing-results: ${{ steps.create-json.outputs.json }}
+    steps:
+      - name: Generate JSON Object
+        id: create-json
+        run: |
+          echo 'json=[{"image": "ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge", "signed": false}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/node-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/frontend:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/backend:edge", "signed": false}]' >> "$GITHUB_OUTPUT"
+        shell: bash
 
-  # job2:
-  #   runs-on: ubuntu-latest
-  #   needs: job1
-  #   if: failure()
-  #   steps:
-  #     - name: Run if Job 1 is cancelled
-  #       run: echo "Job 1 was cancelled, so Job 2 is running."
+  check-image-signed:
+    name: Check if ${{ matrix.service-name }} got signed
+    needs: [secrel, get-images-list]
+    if: ${{ !inputs.skip-scan }}
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
+    steps:
+      # - name: Simulate job cancellation if service is backend
+      #   if: ${{ matrix.service-name == 'frontend' }}
+      #   run: |
+      #     echo "Simulating job cancellation..."
+      #     exit 1
 
-  # get-images-list:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     matrix: ${{ steps.create-json.outputs.json }}
-  #   steps:
-  #     - name: Generate JSON Object
-  #       id: create-json
-  #       run: |
-  #         echo 'json=[{"named-dockerfile":true,"path-dependencies":"./Dockerfile.backend,app-config.yaml,catalog-entities.yaml,provider-dashboard.config.yaml,certs/**,package.json,packages/backend/**,plugins/**,yarn.lock,node-base/Dockerfile","service-name":"backend","path":".","is-argocd-service":true,"argocd-workload-resource":"statefulSet","node-base":true,"type":"app","argocd-service-name":"backend","context":".","docker-file-path":"./Dockerfile.backend","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/backend:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/backend","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"named-dockerfile":true,"path-dependencies":"./Dockerfile.frontend,app-config.yaml,package.json,packages/app/**,plugins/**,yarn.lock,node-base/Dockerfile","service-name":"frontend","path":".","is-argocd-service":true,"argocd-workload-resource":"deployment","node-base":true,"type":"app","argocd-service-name":"frontend","context":".","docker-file-path":"./Dockerfile.frontend","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/frontend:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/frontend","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"context":"node-base","service-name":"node-base","path":"node-base","is-base-image":true,"type":"base","argocd-service-name":"node-base","docker-file-path":"node-base/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/node-base","path-dependencies":"node-base/Dockerfile","base-image":""},{"context":"runner/base","service-name":"runner-base","path":"runner/base","node-base":true,"type":"runner","argocd-service-name":"runner-base","docker-file-path":"runner/base/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/runner-base","path-dependencies":"runner/base/Dockerfile,node-base/Dockerfile","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"},{"service-name":"self-hosted-runner-e2e","path":"runner/e2e","argocd-workload-resource":"deployment","node-base":true,"type":"runner","argocd-service-name":"self-hosted-runner-e2e","context":".","docker-file-path":"runner/e2e/Dockerfile","tagged-ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge","ghcr-name":"ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e","path-dependencies":"runner/e2e/Dockerfile,node-base/Dockerfile","base-image":"ghcr.io/department-of-veterans-affairs/code-va/node-base:edge"}]' >> "$GITHUB_OUTPUT"
-  #       shell: bash
+      - name: Check if image was signed
+        if: ${{ matrix.service-name != 'frontend' }}
+        env:
+          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
+          IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
+        run: |
+          python --version
+          echo $IMAGE_RESULTS |
+          jq -e --arg i $IMAGE_NAME 'contains([{
+            "image":$i,
+            "signed":true
+          }])'
 
-  # secrel:
-  #   runs-on: ubuntu-latest
-  #   outputs:
-  #     image-signing-results: ${{ steps.create-json.outputs.json }}
-  #   steps:
-  #     - name: Generate JSON Object
-  #       id: create-json
-  #       run: |
-  #         echo 'json=[{"image": "ghcr.io/department-of-veterans-affairs/code-va/self-hosted-runner-e2e:edge", "signed": false}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/runner-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/node-base:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/frontend:edge", "signed": true}, {"image": "ghcr.io/department-of-veterans-affairs/code-va/backend:edge", "signed": false}]' >> "$GITHUB_OUTPUT"
-  #       shell: bash
-
-  # check-image-signed:
-  #   name: Check if ${{ matrix.service-name }} got signed
-  #   needs: [secrel, get-images-list]
-  #   if: ${{ !inputs.skip-scan }}
-  #   runs-on: ubuntu-22.04
-  #   strategy:
-  #     matrix:
-  #       include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
-  #   steps:
-  #     - name: Simulate job cancellation if service is backend
-  #       if: ${{ matrix.service-name == 'frontend' }}
-  #       run: |
-  #         echo "Simulating job cancellation..."
-  #         exit 1
-
-  #     - name: Check if image was signed
-  #       if: ${{ matrix.service-name != 'frontend' }}
-  #       env:
-  #         IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
-  #         IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
-  #       run: |
-  #         echo $IMAGE_RESULTS |
-  #         jq -e --arg i $IMAGE_NAME 'contains([{
-  #           "image":$i,
-  #           "signed":true
-  #         }])'
 
 
