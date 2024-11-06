@@ -40,13 +40,21 @@ jobs:
       matrix:
         include: ${{ fromJson(needs.get-images-list.outputs.matrix) }}
     steps:
+      - name: Simulate job cancellation if service is backend
+        if: ${{ matrix.service-name == 'frontend' }}
+        run: |
+          echo "Simulating job cancellation..."
+          exit 1
+
       - name: Check if image was signed
+        if: ${{ matrix.service-name != 'frontend' }}
         env:
-          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results}}
+          IMAGE_RESULTS: ${{ needs.secrel.outputs.image-signing-results }}
           IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
-        run: >
+        run: |
           echo $IMAGE_RESULTS |
           jq -e --arg i $IMAGE_NAME 'contains([{
-          "image":$i,
-          "signed":true
+            "image":$i,
+            "signed":true
           }])'
+
