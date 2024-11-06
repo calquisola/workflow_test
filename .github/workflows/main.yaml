@@ -44,13 +44,13 @@ jobs:
       IMAGE_NAME: ${{ matrix.tagged-ghcr-name }}
     steps:
       - name: Check if IMAGE_RESULTS is defined
-        if: ${{ $IMAGE_RESULTS != '' }}
+        if: ${{ env.IMAGE_RESULTS != '' }}
         run: |
           echo "IMAGE_RESULTS is defined."
       - name: Check if image was signed
         run: >
-          echo $IMAGE_RESULTS |
-          jq -e --arg i $IMAGE_NAME 'contains([{
+          echo env.IMAGE_RESULTS |
+          jq -e --arg i env.IMAGE_NAME 'contains([{
           "image":$i,
           "signed":true
           }])'
