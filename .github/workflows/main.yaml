@@ -12,12 +12,13 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      output_1: ${{ steps.gen_output.outputs.output_1 }}
-      output_2: ${{ steps.gen_output.outputs.output_2 }}
-      output_3: ${{ steps.gen_output.outputs.output_3 }}
+      output_dev: ${{ steps.gen_output.outputs.output_dev }}
+      output_qa: ${{ steps.gen_output.outputs.output_qa }}
+      output_sandox: ${{ steps.gen_output.outputs.output_sandbox }}
+      output_prod: ${{ steps.gen_output.outputs.output_prod }}
     strategy:
       matrix:
-        version: [1, 2, 3]
+        version: [dev, qa, sandbox, prod]
     steps:
       - name: Generate output
         id: gen_output
@@ -29,7 +30,7 @@ jobs:
     needs: [job1]
     strategy:
       matrix:
-        version: [1, 2, 3]
+        version: [dev, qa, sandbox, prod]
     steps:
       - name: Print output dynamically
         run: |
