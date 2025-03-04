@@ -31,6 +31,8 @@ jobs:
     #   matrix:
     #     version: [1, 2, 3]
     steps:
-      - run: |
-            my_json='${{ toJSON(needs.job1.outputs) }}'
-            echo "my_json['output_1']"
+      - name: Print output dynamically
+        run: |
+          version="${{ matrix.version }}"
+          output_var="output_${version}"
+          echo "$output_var: ${{ needs.job1.outputs[format('output_{0}', matrix.version)] }}"
